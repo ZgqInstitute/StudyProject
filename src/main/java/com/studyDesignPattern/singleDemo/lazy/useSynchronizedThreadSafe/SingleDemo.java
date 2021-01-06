@@ -7,8 +7,7 @@ public class SingleDemo {
 	}
 
 	public synchronized static SingleDemo getInstance() {
-		if (singleDemo == null) {
-			try {Thread.sleep(2);} catch (InterruptedException e) {e.printStackTrace();}
+		if (singleDemo == null) {//当SingleDemo对象不为null时，这一行代码没必要加锁
 			singleDemo = new SingleDemo();
 		}
 		return singleDemo;

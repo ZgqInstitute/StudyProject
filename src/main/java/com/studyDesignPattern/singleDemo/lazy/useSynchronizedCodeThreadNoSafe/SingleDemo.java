@@ -11,6 +11,7 @@ public class SingleDemo {
 		if (singleDemo == null) {
 			// -->t1   -->t2
 			synchronized (SingleDemo.class){
+				//线程在获得锁后，直接创建对象会有线程安全问题
 				singleDemo = new SingleDemo();
 			}
 		}
