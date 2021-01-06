@@ -7,7 +7,7 @@ public class SingleDemo {
 	private SingleDemo() {
 	}
 
-	public synchronized static SingleDemo getInstance() {
+	public static SingleDemo getInstance() {
 		if (singleDemo == null) {
 			synchronized (SingleDemo.class) {
 				if (singleDemo == null) {
