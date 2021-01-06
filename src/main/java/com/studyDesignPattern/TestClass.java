@@ -1,15 +1,41 @@
 package com.studyDesignPattern;
 
-import com.studyDesignPattern.singleDemo.hungry.SingleStaticConstant.SingleDemo;
+
+import com.studyDesignPattern.singleDemo.lazy.doubleIfNoUseVolatile.SingleDemo;
 import org.junit.Test;
 
 public class TestClass {
 
 	@Test
-	public void testMethod(){
-		SingleDemo instance1 = SingleDemo.getInstance();
-		SingleDemo instance2 = SingleDemo.getInstance();
-		System.out.println(instance1 == instance2);
+	public void testMethod() {
+
+		System.out.println("ssss");
+		Thread thread1 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				SingleDemo instance1 = SingleDemo.getInstance();
+				System.out.println(Thread.currentThread().getName()+"   "+instance1);
+			}
+		});
+		thread1.start();
+
+
+		Thread thread2 = new Thread(new Runnable() {
+			@Override
+			public void run() {
+				SingleDemo instance2 = SingleDemo.getInstance();
+				System.out.println(Thread.currentThread().getName()+"       "+instance2);
+			}
+		});
+		thread2.start();
+
+//		try {
+//			Thread.sleep(2000);
+//		} catch (InterruptedException e) {
+//			e.printStackTrace();
+//		}
+
+		System.out.println("TTTTTTTTTTTTTTTTTTTTTTTTTT");
 
 	}
 }
