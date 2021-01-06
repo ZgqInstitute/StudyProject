@@ -1,15 +1,15 @@
 package com.studyDesignPattern.singleDemo.lazy.threadNoSafe;
 
 public class SingleDemo {
-
+	//这里不能加final修饰，一旦加了final修饰就要赋初值，而且后面不能重新赋值
 	private static SingleDemo singleDemo;
 
 	private SingleDemo() {
 	}
 
-	public /*synchronized*/ static SingleDemo getInstance() {
+	public static SingleDemo getInstance() {
 		if (singleDemo == null) {
-//			try {Thread.sleep(2);} catch (InterruptedException e) {e.printStackTrace();}
+			// -->t1   -->t2
 			singleDemo = new SingleDemo();
 		}
 		return singleDemo;
