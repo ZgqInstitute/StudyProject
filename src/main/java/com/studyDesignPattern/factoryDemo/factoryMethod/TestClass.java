@@ -6,12 +6,10 @@ public class TestClass {
 
 	@Test
 	public void testMethod(){
-		Application01 application01  = new CreateProduct01();
-		Product product = application01.getObject();
+		SimpleFactory simpleFactory = new CreateProduct01();
+		Product product = simpleFactory.getObject();
 		product.method();
 
 	}
-
-
 
 }
