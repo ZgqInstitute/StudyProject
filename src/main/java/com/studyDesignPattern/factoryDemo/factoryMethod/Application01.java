@@ -1,7 +1,7 @@
 package com.studyDesignPattern.factoryDemo.factoryMethod;
 
 
-abstract class Application {
+public abstract class Application01 {
 	abstract Product createProduct();
 
 	Product getObject() {
