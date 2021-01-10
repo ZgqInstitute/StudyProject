@@ -1,4 +1,5 @@
-package com.studyDesignPattern.factoryMethodDemo;
+package com.studyDesignPattern.factoryDemo.factoryMethod;
+
 
 abstract class Application {
 	abstract Product createProduct();

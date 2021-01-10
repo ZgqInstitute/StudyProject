@@ -1,4 +1,6 @@
-package com.studyDesignPattern.factoryMethodDemo;
+package com.studyDesignPattern.factoryDemo.factoryMethod;
+
+
 
 public class CreateProduct02 extends Application {
 	@Override

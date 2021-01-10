@@ -1,4 +1,5 @@
-package com.studyDesignPattern.factoryMethodDemo;
+package com.studyDesignPattern.factoryDemo.factoryMethod;
+
 
 class Product01 implements Product {
 	@Override

@@ -1,5 +1,9 @@
-package com.studyDesignPattern.factoryMethodDemo;
+package com.studyDesignPattern.factoryDemo;
 
+import com.studyDesignPattern.factoryDemo.factoryMethod.Application;
+import com.studyDesignPattern.factoryDemo.factoryMethod.CreateProduct01;
+import com.studyDesignPattern.factoryDemo.factoryMethod.CreateProduct02;
+import com.studyDesignPattern.factoryDemo.factoryMethod.Product;
 import org.junit.Test;
 
 public class TestClass {
