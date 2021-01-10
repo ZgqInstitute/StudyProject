@@ -1,4 +1,4 @@
-package com.studyDesignPattern;
+package com.studyDesignPattern.singleDemo;
 
 
 import com.studyDesignPattern.singleDemo.lazy.doubleIfNoUseVolatile.SingleDemo;
