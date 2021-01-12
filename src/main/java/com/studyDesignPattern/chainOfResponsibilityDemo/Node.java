@@ -19,7 +19,7 @@ public abstract class Node {
     }
 
     /**
-     * 每个节点都会执行自己的任务
+     * 每个节点都会执行自己的任务，只有当前节点返回true才会继续将userRequest传给下一个节点
      */
     abstract boolean process(UserRequest userRequest);
 }

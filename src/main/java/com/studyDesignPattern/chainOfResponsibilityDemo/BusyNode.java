@@ -1,21 +1,21 @@
 package com.studyDesignPattern.chainOfResponsibilityDemo;
 
 /**
- * 判断是否登录节点
+ * 判断是否繁忙节点
  */
-public class LoginNode extends Node{
+public class BusyNode extends Node{
 
     //通过构造函数接收下一个节点，
     //当前节点处理完后交给下一个节点进行处理
-    public LoginNode(Node nextNode) {
+    public BusyNode(Node nextNode) {
         super(nextNode);
     }
 
     @Override
     boolean process(UserRequest userRequest) {
         //判断是否登录成功
-        if (userRequest.isLogin()) {
-            System.out.println("登录处理成功");
+        if (userRequest.isBusy()) {
+            System.out.println("no busy");
             //登录成功，获取下一个节点
             Node nextNode = getNextNode();
             //若下一个节点为null，说明当前节点是最后一个节点
@@ -30,7 +30,7 @@ public class LoginNode extends Node{
             }
         }
         //若当前节点处理失败，直接返回false
-        System.out.println("登录失败");
+        System.out.println("busy...");
         return false;
     }
 }

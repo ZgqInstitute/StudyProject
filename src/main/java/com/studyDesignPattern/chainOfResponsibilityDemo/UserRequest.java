@@ -11,16 +11,42 @@ public class UserRequest {
         this.isBusy = isBusy;
     }
 
-    public boolean isLogin(){
+    public boolean isLogin() {
         return isLogin;
     }
 
-    public boolean isAuthority(){
+    public boolean isAuthority() {
         return isAuthority;
     }
 
-    public boolean isBusy(){
+    public boolean isBusy() {
         return isBusy;
+    }
+
+    static class RequestBuild {
+        private boolean isLogin;
+        private boolean isAuthority;
+        private boolean isBusy;
+
+        RequestBuild isLoginMethod(boolean isLogin) {
+            this.isLogin = isLogin;
+            return this;
+        }
+
+        RequestBuild isAuthorityMethod(boolean isAuthority) {
+            this.isAuthority = isAuthority;
+            return this;
+        }
+
+        RequestBuild isBusyMethod(boolean isBusy) {
+            this.isBusy = isBusy;
+            return this;
+        }
+
+        public UserRequest build() {
+            return new UserRequest(isLogin, isAuthority, isBusy);
+        }
+
     }
 
 
