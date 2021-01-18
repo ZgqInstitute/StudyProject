@@ -14,6 +14,6 @@ public class TestClass {
 		subject.notifyObserver("主题对象发生变化");
 
 		//从主题对象中移除观察者对象
-		subject.removeObserver(observer);
+//		subject.removeObserver(observer);
 	}
 }
