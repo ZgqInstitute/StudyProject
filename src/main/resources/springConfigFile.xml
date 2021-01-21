@@ -4,17 +4,15 @@
        xsi:schemaLocation="http://www.springframework.org/schema/beans http://www.springframework.org/schema/beans/spring-beans.xsd">
 
 
-    <bean id="person01" class="com.studyFrame.springDemo.Person">
-        <property name="name" value="zhangsan"></property>
+    <bean id="aaa" class="com.studyFrame.springDemo.AAA">
+        <property name="bbb" ref="bbb"></property>
     </bean>
 
-    <bean id="person02" class="com.studyFrame.springDemo.Person02">
-        <property name="name" value="cp3"></property>
+
+    <bean id="bbb" class="com.studyFrame.springDemo.BBB">
+        <property name="aaa" ref="aaa"></property>
     </bean>
 
-    <bean id="myBeanFactoryPostProcessor" class="com.studyFrame.springDemo.MyBeanFactoryPostProcessor"></bean>
-
-    <bean id="myBeanFactoryPostProcessor02" class="com.studyFrame.springDemo.MyBeanFactoryPostProcessor02"></bean>
 
 
 

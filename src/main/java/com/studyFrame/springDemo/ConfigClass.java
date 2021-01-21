@@ -7,8 +7,14 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigClass {
 
 	@Bean
-	public FactoryBeanDemo factoryBeanDemo01(){
-		return new FactoryBeanDemo();
+	public Person person001(){
+		return new Person();
 	}
+
+	@Bean
+	public Home home001(){
+		return new Home();
+	}
+
 
 }

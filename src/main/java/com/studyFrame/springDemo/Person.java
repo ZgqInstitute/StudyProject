@@ -1,7 +1,12 @@
 package com.studyFrame.springDemo;
 
+import org.springframework.beans.factory.annotation.Autowired;
+
 public class Person {
 	private String name;
+
+	@Autowired
+	private Home home;
 
 	Person(){}
 
@@ -18,10 +23,19 @@ public class Person {
 		this.name = name;
 	}
 
+	public Home getHome() {
+		return home;
+	}
+
+	public void setHome(Home home) {
+		this.home = home;
+	}
+
 	@Override
 	public String toString() {
 		return "Person{" +
 				"name='" + name + '\'' +
+				", home=" + home +
 				'}';
 	}
 }
