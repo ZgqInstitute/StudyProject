@@ -1,5 +1,6 @@
-package com.studyFrame.springDemo;
+package com.studyFrame.springDemo.IOC;
 
+import com.studyFrame.springDemo.IOC.Home;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Person {
@@ -33,7 +34,7 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return "Person{" +
+		return "Country{" +
 				"name='" + name + '\'' +
 				", home=" + home +
 				'}';

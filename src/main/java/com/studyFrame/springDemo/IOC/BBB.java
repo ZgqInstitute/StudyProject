@@ -1,4 +1,6 @@
-package com.studyFrame.springDemo;
+package com.studyFrame.springDemo.IOC;
+
+import com.studyFrame.springDemo.IOC.AAA;
 
 public class BBB {
 	private AAA aaa;

@@ -1,4 +1,4 @@
-package com.studyFrame.springDemo;
+package com.studyFrame.springDemo.DI;
 
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
@@ -7,14 +7,13 @@ import org.springframework.context.annotation.Configuration;
 public class ConfigClass {
 
 	@Bean
-	public Person person001(){
-		return new Person();
+	public China china(){
+		return new China("中国");
 	}
 
 	@Bean
-	public Home home001(){
-		return new Home();
+	public CountryServiceImpl countryService(){
+		return new CountryServiceImpl();
 	}
-
 
 }

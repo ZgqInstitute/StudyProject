@@ -1,4 +1,4 @@
-package com.studyFrame.springDemo;
+package com.studyFrame.springDemo.IOC;
 
 public class Home {
 	private String address;

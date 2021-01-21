@@ -17,7 +17,7 @@ public class TestClass {
 
 		List<Person> list02 = new ArrayList<>();
 		list02.add(new Person("AAA"));
-//		list02.addAll(new Person("BBB"));
+//		list02.addAll(new Country("BBB"));
 		list02.addAll(list01);
 	}
 }

@@ -61,7 +61,7 @@ public class Person {
 
 	@Override
 	public String toString() {
-		return "Person{" +
+		return "Country{" +
 				"name='" + name + '\'' +
 				", age=" + age +
 				", home=" + home +
