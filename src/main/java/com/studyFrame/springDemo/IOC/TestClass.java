@@ -1,17 +1,18 @@
 package com.studyFrame.springDemo.IOC;
 
-import com.studyFrame.springDemo.IOC.MyJavaBean;
 import org.junit.Test;
 import org.springframework.beans.factory.config.InstantiationAwareBeanPostProcessorAdapter;
+import org.springframework.beans.factory.support.AbstractAutowireCapableBeanFactory;
+import org.springframework.beans.factory.support.DefaultSingletonBeanRegistry;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.support.ClassPathXmlApplicationContext;
 
 
-public class TestClass extends InstantiationAwareBeanPostProcessorAdapter {
+public class TestClass   {
 	@Test
 	public void testMethod(){
 //		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ConfigClass.class);
-		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("springConfigFile.xml");
+		ApplicationContext applicationContext = new ClassPathXmlApplicationContext("springTestCircleRelyOn.xml");
 		MyJavaBean myJavaBean = applicationContext.getBean(MyJavaBean.class);
 		System.out.println("描述：" + myJavaBean.getDesc());
 		System.out.println("备注：" + myJavaBean.getRemark());

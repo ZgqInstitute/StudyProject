@@ -19,7 +19,7 @@ public class TestClass {
 
 		System.out.println(parameterTypes.length);
 		System.out.println("-----------------------------");
-		method01.invoke(o,"AAAA","BBB");
+		method01.invoke(o,"AAAA","B");
 
 	}
 }

@@ -12,7 +12,7 @@ public class ConfigClass {
 	}
 
 	@Bean
-	public CountryServiceImpl countryService(){
+	public CountryServiceImpl countryServiceImpl(){
 		return new CountryServiceImpl();
 	}
 

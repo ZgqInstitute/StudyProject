@@ -16,8 +16,8 @@ public class TestClass {
 		list01.add(new Person("造流"));
 
 		List<Person> list02 = new ArrayList<>();
-		list02.add(new Person("AAA"));
-//		list02.addAll(new Country("BBB"));
+		list02.add(new Person("A"));
+//		list02.addAll(new Country("B"));
 		list02.addAll(list01);
 	}
 }
