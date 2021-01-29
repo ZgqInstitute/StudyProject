@@ -1,20 +1,36 @@
 package com.studyTime;
 
 import org.junit.Test;
-
-import java.time.LocalDate;
-import java.time.LocalDateTime;
-import java.time.LocalTime;
+import java.util.ArrayList;
+import java.util.Comparator;
+import java.util.Iterator;
+import java.util.List;
+import java.util.stream.Collectors;
 
 public class TestClass {
 
 	@Test
 	public void testMethod(){
-		LocalDate localDate1 = LocalDate.of(2020, 12, 02);
-		LocalDate localDate2 = LocalDate.of(2020, 12, 10);
-		LocalDateTime date1 = LocalDateTime.of(localDate1, LocalTime.MIN);
-		LocalDateTime date2 = LocalDateTime.of(localDate2, LocalTime.MAX);
-		System.out.println(date1);
-		System.out.println(date2);
+		List<Person> list = new ArrayList<>();
+		list.add(new Person(12));
+		list.add(new Person(16));
+		list.add(new Person(22));
+		list.add(new Person(78));
+
+		Iterator<Person> iterator1 = list.iterator();
+
+		while (iterator1.hasNext()) {
+			System.out.println(iterator1.next().getAge());
+		}
+
+		System.out.println("--------------");
+		List<Integer> collect = list.stream().map(Person::getAge).sorted(Comparator.reverseOrder()).collect(Collectors.toList());
+
+		Iterator<Integer> iterator = collect.iterator();
+
+		while (iterator.hasNext()){
+			System.out.println(iterator.next());
+		}
+
 	}
 }
