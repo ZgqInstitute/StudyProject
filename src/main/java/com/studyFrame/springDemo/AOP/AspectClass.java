@@ -13,10 +13,10 @@ public class AspectClass {
 		System.out.println("目标方法执行前");
 	}
 
-//	@After("pointCut()")
-//	public void targetMethodAfter(){
-//		System.out.println("目标方法执行结束");
-//	}
+	@After("pointCut()")
+	public void targetMethodAfter(){
+		System.out.println("目标方法执行结束");
+	}
 
 
 }

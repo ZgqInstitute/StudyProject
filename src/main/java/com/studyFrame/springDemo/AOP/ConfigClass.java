@@ -18,9 +18,5 @@ public class ConfigClass {
 		return new AspectClass();
 	}
 
-	@Bean
-	public A a(){
-		return new A();
-	}
 
 }
