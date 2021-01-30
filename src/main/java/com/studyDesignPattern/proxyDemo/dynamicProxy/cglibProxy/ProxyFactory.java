@@ -22,13 +22,13 @@ public class ProxyFactory implements MethodInterceptor {
 	 * 通过该方法创建目标对象(target)的代理对象（注：目标对象的代理对象就是目标对象的子类对象）
 	 */
 	public Object getProxyInstance() {
-		//创建一个工具类
+		//创建一个工具类(Enhancer相当与JDK动态代理的Proxy)
 		Enhancer enhancer = new Enhancer();
 		//设置父类
 		enhancer.setSuperclass(target.getClass());
 		//设置回调函数(回调函数就是代理工厂类)
 		enhancer.setCallback(this);
-		//通过工具类创建代理对象
+		//通过工具类创建代理对象   <--enhancer.create()相当于Proxy.newProxyInstance()-->
 		Object proxyInstance = enhancer.create();
 		return proxyInstance;
 	}
