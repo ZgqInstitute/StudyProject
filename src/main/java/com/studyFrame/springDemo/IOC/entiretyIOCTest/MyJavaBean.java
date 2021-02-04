@@ -1,4 +1,4 @@
-package com.studyFrame.springDemo.IOC;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest;
 
 import org.springframework.beans.factory.InitializingBean;
 
@@ -15,10 +15,6 @@ public class MyJavaBean implements InitializingBean {
 		System.out.println("调用initMethod方法");
 	}
 
-//	@PostConstruct
-//	public void JSR250(){
-//		System.out.println("JSR250");
-//	}
 
 	@Override
 	public void afterPropertiesSet() throws Exception {

@@ -1,7 +1,8 @@
-package com.studyFrame.springDemo.IOC;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
+import org.springframework.context.annotation.Bean;
 
 public class MyBeanPostProcessor implements BeanPostProcessor {
 	@Override
@@ -15,4 +16,6 @@ public class MyBeanPostProcessor implements BeanPostProcessor {
 		System.out.println("BeanPostProcessor，对象  " + beanName + "  调用初始化方法之后的数据：" + bean.toString());
 		return bean;
 	}
+
+
 }

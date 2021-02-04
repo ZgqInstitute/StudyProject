@@ -1,4 +1,4 @@
-package com.studyFrame.springDemo.IOC;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest;
 
 public class Home {
 	private String address;

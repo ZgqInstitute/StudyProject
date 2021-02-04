@@ -1,4 +1,4 @@
-package com.studyFrame.springDemo.IOC;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;

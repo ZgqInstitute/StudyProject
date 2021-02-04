@@ -1,6 +1,6 @@
-package com.studyFrame.springDemo.IOC;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest;
 
-import com.studyFrame.springDemo.IOC.Home;
+import com.studyFrame.springDemo.IOC.entiretyIOCTest.Home;
 import org.springframework.beans.factory.annotation.Autowired;
 
 public class Person {
