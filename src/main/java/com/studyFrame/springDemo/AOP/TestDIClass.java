@@ -1,11 +1,10 @@
 package com.studyFrame.springDemo.AOP;
 
 import org.junit.Test;
-import org.springframework.beans.factory.support.DefaultListableBeanFactory;
 import org.springframework.context.annotation.AnnotationConfigApplicationContext;
 
 
-public class TestDIClass extends DefaultListableBeanFactory {
+public class TestDIClass   {
 
 	@Test
 	public void testMethod(){

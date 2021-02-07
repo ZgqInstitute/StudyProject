@@ -11,7 +11,6 @@ public class CountryServiceImpl  {
 		System.out.println("执行构造函数");
 	}
 
-
 	@Autowired
 	public void testAutowiredAtMethod(){
 		System.out.println("@Autowired标注在方法上@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@");
