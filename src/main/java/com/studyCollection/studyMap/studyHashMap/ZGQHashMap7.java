@@ -12,10 +12,11 @@ public class ZGQHashMap7<K, V> {
 	//(ZGQ) 通过调用空参的构造函数，
 	static final int DEFAULT_INITIAL_CAPACITY = 1 << 4; // aka 16
 	static final int MAXIMUM_CAPACITY = 1 << 30;
-	//(ZGQ) hash种子
+	//(ZGQ) hash种子，会参与key的hashCode运算，作用就是让hashCode更散列一些，以便后面和数组长度做 与 运算产生的数组下标更随机些
 	transient int hashSeed = 0;
 	static final int ALTERNATIVE_HASHING_THRESHOLD_DEFAULT = Integer.MAX_VALUE;
 	final float loadFactor;
+
 	transient int modCount;
 	//(ZGQ) 表示当前hashMap的数组已经存放了几个元素
 	transient int size;
@@ -57,7 +58,8 @@ public class ZGQHashMap7<K, V> {
 		}
 	}
 
-	/**---ZGQ---
+	/**
+	 * ---ZGQ---
 	 * 调用空参的构造函数时，会默认设置threshold为16(后面put时才会创建数组，大小为threshold)
 	 * 注：此时数组还没有开始创建
 	 */
@@ -152,7 +154,10 @@ public class ZGQHashMap7<K, V> {
 		//(ZGQ) 将旧数组的数据拷贝到新数组
 		transfer(newTable, initHashSeedAsNeeded(newCapacity));
 
+		//(ZGQ) 将新数组赋给hashMap
 		table = newTable;
+
+		//(ZGQ) 根据新数组的大小重新计数阈值
 		threshold = (int) Math.min(newCapacity * loadFactor, MAXIMUM_CAPACITY + 1);
 	}
 
@@ -160,9 +165,13 @@ public class ZGQHashMap7<K, V> {
 	void transfer(Entry[] newTable, boolean rehash) {
 		int newCapacity = newTable.length;
 		//(ZGQ) table为旧数组
-		for (Entry<K,V> e : table) {
-			while(null != e) {
-				Entry<K,V> next = e.next;
+		for (Entry<K, V> e : table) {
+			while (null != e) {
+				/**---ZGQ---
+				 *  1）这里先把原数组下标为2的第一个元素的next属性先赋给next保存起来，因为后面要对这个next属性赋null
+				 *  2）将原数组下标为2的第二个元素的next属性先赋给next保存起来
+				 */
+				Entry<K, V> next = e.next;
 				if (rehash) {
 					e.hash = null == e.key ? 0 : hash(e.key);
 				}
@@ -172,10 +181,23 @@ public class ZGQHashMap7<K, V> {
 				 *  2）存入新数组的下标为 2 + 16 = 18
 				 */
 				int i = indexFor(e.hash, newCapacity);
-				//(ZGQ) 将原数组下标为2的第一个元素的next指向上一步计算出来的新数组下标
+
+				/**---ZGQ---
+				 * 1-将原数组下标为2的第一个元素的next指向上一步计算出来的新数组下标(这里假设计数出新数组的下标也为2)，就是将原数组下标为2的第一个元素的next置为null
+				 * 2-将原数组下标为2的第一个元素赋给原数组下标为2的第二个元素的next属性
+				 */
 				e.next = newTable[i];
-				//(ZGQ) 将原数组下标为2的第一个元素移动到新数组计数出来的下标位置
+
+				/**---ZGQ---
+				 * 1-将原数组下标为2的第一个元素移动到新数组下标为2的位置
+				 * 2-将链表向下移动
+				 */
 				newTable[i] = e;
+
+				/**---ZGQ---
+				 * 1-将原数组下标为2的第二个元素赋给e
+				 * 2-将原数组下标为2的第三个元素赋给e
+				 */
 				e = next;
 			}
 		}
@@ -200,7 +222,7 @@ public class ZGQHashMap7<K, V> {
 	}
 
 	void createEntry(int hash, K key, V value, int bucketIndex) {
-		Entry<K,V> e = table[bucketIndex];
+		Entry<K, V> e = table[bucketIndex];
 		//(ZGQ) 将新put的对象插入数组对应位置的头部，再将链表向下移动
 		table[bucketIndex] = new Entry<>(hash, key, value, e);
 		size++;
@@ -233,7 +255,9 @@ public class ZGQHashMap7<K, V> {
 		return h & (length - 1);
 	}
 
-	/**---ZGQ---
+	/**
+	 * ---ZGQ---
+	 *
 	 * @param toSize = threshold 在构造函数中确定的大小16
 	 */
 	private void inflateTable(int toSize) {
@@ -356,5 +380,39 @@ public class ZGQHashMap7<K, V> {
 		 */
 		void recordRemoval(ZGQHashMap7<K, V> m) {
 		}
+	}
+
+	public V get(Object key) {
+		if (key == null)
+			return getForNullKey();
+		Entry<K, V> entry = getEntry(key);
+
+		return null == entry ? null : entry.getValue();
+	}
+
+	private V getForNullKey() {
+		if (size == 0) {
+			return null;
+		}
+		for (Entry<K, V> e = table[0]; e != null; e = e.next) {
+			if (e.key == null)
+				return e.value;
+		}
+		return null;
+	}
+
+	final Entry<K, V> getEntry(Object key) {
+		if (size == 0) {
+			return null;
+		}
+
+		//(ZGQ) 计算key的hashMap值
+		int hash = (key == null) ? 0 : hash(key);
+		for (Entry<K, V> e = table[indexFor(hash, table.length)]; e != null; e = e.next) {
+			Object k;
+			if (e.hash == hash && ((k = e.key) == key || (key != null && key.equals(k))))
+				return e;
+		}
+		return null;
 	}
 }

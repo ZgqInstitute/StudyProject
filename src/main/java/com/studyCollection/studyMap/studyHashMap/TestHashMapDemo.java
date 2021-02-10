@@ -3,7 +3,7 @@ package com.studyCollection.studyMap.studyHashMap;
 import org.junit.Test;
 
 
-import java.util.HashMap;
+import java.util.concurrent.ConcurrentHashMap;
 
 
 public class TestHashMapDemo {
@@ -11,14 +11,9 @@ public class TestHashMapDemo {
 	@Test
 	public void testMethod() {
 
-		HashMap<String, String> hashMap = new HashMap<>();
+		ConcurrentHashMap<String, String> hashMap = new ConcurrentHashMap<>();
 
-		for (int i = 0; i < 15; i++) {
-			hashMap.put("zgq_key " + i, "zgq_value " + i);
-		}
-
-		hashMap.put("a","A");
-
+		hashMap.put("aa","bb");
 
 
 	}
