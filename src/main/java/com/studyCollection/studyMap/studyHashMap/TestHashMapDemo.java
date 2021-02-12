@@ -2,8 +2,8 @@ package com.studyCollection.studyMap.studyHashMap;
 
 import org.junit.Test;
 
+import java.util.HashMap;
 
-import java.util.concurrent.ConcurrentHashMap;
 
 
 public class TestHashMapDemo {
@@ -11,9 +11,9 @@ public class TestHashMapDemo {
 	@Test
 	public void testMethod() {
 
-		ConcurrentHashMap<String, String> hashMap = new ConcurrentHashMap<>();
+		HashMap<String, String> hashMap = new HashMap<>();
 
-		hashMap.put("aa","bb");
+		hashMap.put("key_zgq","value_zgq");
 
 
 	}
