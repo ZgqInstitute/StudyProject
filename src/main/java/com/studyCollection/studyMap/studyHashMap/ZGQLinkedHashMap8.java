@@ -1,6 +1,5 @@
 package com.studyCollection.studyMap.studyHashMap;
 
-import java.util.HashMap;
 
 public class ZGQLinkedHashMap8<K,V> extends ZGQHashMap8<K,V>{
 	static class Entry<K,V> extends ZGQHashMap8.Node<K,V> {
