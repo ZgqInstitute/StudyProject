@@ -148,6 +148,10 @@ public class ZGQHashMap8<K,V> implements Serializable {
 		}
 	}
 
+	public V put(K key, V value) {
+		return putVal(hash(key), key, value, false, true);
+	}
+
 	final V putVal(int hash, K key, V value, boolean onlyIfAbsent,
 				   boolean evict) {
 		Node<K,V>[] tab; Node<K,V> p; int n, i;
@@ -306,12 +310,15 @@ public class ZGQHashMap8<K,V> implements Serializable {
 		return newTab;
 	}
 
+	/**---ZGQ---
+	 * TreeNode表示红黑树的节点
+	 */
 	static final class TreeNode<K,V> extends ZGQLinkedHashMap8.Entry<K,V> {
-		TreeNode<K,V> parent;  // red-black tree links
-		TreeNode<K,V> left;
-		TreeNode<K,V> right;
+		TreeNode<K,V> parent;  // red-black tree links 父节点
+		TreeNode<K,V> left; //(ZGQ) 左节点
+		TreeNode<K,V> right; //(ZGQ) 右节点
 		TreeNode<K,V> prev;    // needed to unlink next upon deletion
-		boolean red;
+		boolean red; //(ZGQ) 是否为红色？ true : false
 		TreeNode(int hash, K key, V val, Node<K,V> next) {
 			super(hash, key, val, next);
 		}
@@ -416,6 +423,7 @@ public class ZGQHashMap8<K,V> implements Serializable {
 
 						TreeNode<K,V> xp = p;
 						if ((p = (dir <= 0) ? p.left : p.right) == null) {
+							//(ZGQ) 将xp节点赋值给x节点的父节点
 							x.parent = xp;
 							if (dir <= 0)
 								xp.left = x;
@@ -490,6 +498,9 @@ public class ZGQHashMap8<K,V> implements Serializable {
 					x.parent = x.prev = xp;
 					if (xpn != null)
 						((TreeNode<K,V>)xpn).prev = x;
+					/**---ZGQ---
+					 * balanceInsertion()方法作用：平衡红黑树
+					 */
 					moveRootToFront(tab, balanceInsertion(root, x));
 					return null;
 				}
@@ -639,13 +650,14 @@ public class ZGQHashMap8<K,V> implements Serializable {
 			}
 		}
 
-		/* ------------------------------------------------------------ */
-		// Red-black tree methods, all adapted from CLR
-
+		/**---ZGQ---
+		 * 左旋
+		 * p：为新增节点的父节点，表示需要旋转的节点
+		 */
 		static <K,V> TreeNode<K,V> rotateLeft(TreeNode<K,V> root,
 											  TreeNode<K,V> p) {
 			TreeNode<K,V> r, pp, rl;
-			if (p != null && (r = p.right) != null) {
+			if (p != null && (r = p.right) != null) {//(ZGQ) 新增节点的父节点不为空 且 新增节点的父节点的右子节点不为空
 				if ((rl = p.right = r.left) != null)
 					rl.parent = p;
 				if ((pp = r.parent = p.parent) == null)
@@ -660,6 +672,9 @@ public class ZGQHashMap8<K,V> implements Serializable {
 			return root;
 		}
 
+		/**---ZGQ---
+		 * 右旋
+		 */
 		static <K,V> TreeNode<K,V> rotateRight(TreeNode<K,V> root,
 											   TreeNode<K,V> p) {
 			TreeNode<K,V> l, pp, lr;
@@ -678,25 +693,46 @@ public class ZGQHashMap8<K,V> implements Serializable {
 			return root;
 		}
 
+		/**---ZGQ---
+		 * 该方法做的事：进入该方法之前新增节点已经插入红黑树，这个方法是做红黑树的平衡操作！
+		 * @param root 表示红黑树的根节点
+		 * @param x 表示新插入的节点
+		 * @return
+		 */
 		static <K,V> TreeNode<K,V> balanceInsertion(TreeNode<K,V> root,
 													TreeNode<K,V> x) {
+			//(ZGQ) 新插入的节点默认是红色
 			x.red = true;
+			/**---ZGQ---
+			 * xp：表示新增节点的父节点；
+			 * xpp：表示新增节点的祖父节点；
+			 * xppl：表示xpp的左子节点；
+			 * xppr：表示xpp的右子节点；
+			 */
 			for (TreeNode<K,V> xp, xpp, xppl, xppr;;) {
+				//(ZGQ) 判断新增节点的父节点是否为空
 				if ((xp = x.parent) == null) {
+					//(ZGQ) 若新增节点的父节点为空，则表示该红黑树还没有节点，那么新增节点就是根节点，设为黑色
 					x.red = false;
 					return x;
 				}
-				else if (!xp.red || (xpp = xp.parent) == null)
+				else if (!xp.red || (xpp = xp.parent) == null)//(ZGQ) 新增节点的父节点是黑色的 或 新增节点的祖父节点为空 则直接返回父节点
 					return root;
-				if (xp == (xppl = xpp.left)) {
-					if ((xppr = xpp.right) != null && xppr.red) {
-						xppr.red = false;
-						xp.red = false;
-						xpp.red = true;
-						x = xpp;
-					}
-					else {
-						if (x == xp.right) {
+				//(ZGQ) 能执行到这表示新增节点的父节点是红色的
+				if (xp == (xppl = xpp.left)) {//(ZGQ) 新增节点的父节点 == 祖父节点的左子节点
+					if ((xppr = xpp.right) != null && xppr.red) { //(ZGQ) 叔叔节点不为空 且 叔叔节点是红色的 ==> 操作：变色  《情况2.2》
+						xppr.red = false;//(ZGQ) 将新增节点的叔叔节点置 黑
+						xp.red = false;//(ZGQ) 将新增节点的父节点置 黑
+						xpp.red = true;//(ZGQ) 将新增节点的祖父节点置 红
+
+						//(ZGQ) 执行到这子树的平衡关系以及调整好，下面还要调整整颗红黑树的平衡
+
+						x = xpp;//(ZGQ) 由于新增节点的祖父节点颜色由黑变为红，现在将祖父节点作为新节点赋给x，通过循环重新调整红黑树
+					} else {//(ZGQ) 叔叔节点为空 或 叔叔节点是黑色的  ==> 操作：旋转 + 变色  《情况2.1》
+						if (x == xp.right) {//(ZGQ) 新增节点(红色)是父节点(红色)的右节点，父节点是祖父节点(黑色)的左节点。 操作：左旋转 + 变色  《类似情况2.1*》
+							/**---ZGQ---
+							 * 左旋
+							 */
 							root = rotateLeft(root, x = xp);
 							xpp = (xp = x.parent) == null ? null : xp.parent;
 						}
@@ -704,6 +740,9 @@ public class ZGQHashMap8<K,V> implements Serializable {
 							xp.red = false;
 							if (xpp != null) {
 								xpp.red = true;
+								/**---ZGQ---
+								 * 右旋
+								 */
 								root = rotateRight(root, xpp);
 							}
 						}
