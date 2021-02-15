@@ -13,14 +13,14 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 	private static final long serialVersionUID = 7249069246763182397L;
 
 	private static final int MAXIMUM_CAPACITY = 1 << 30;
-	private static final int DEFAULT_CAPACITY = 16;
+	private static final int DEFAULT_CAPACITY = 16;//(ZGQ) 数组初始化大小为16
 	static final int MAX_ARRAY_SIZE = Integer.MAX_VALUE - 8;
 	private static final int DEFAULT_CONCURRENCY_LEVEL = 16;
 	private static final float LOAD_FACTOR = 0.75f;
 	static final int TREEIFY_THRESHOLD = 8;
 	static final int UNTREEIFY_THRESHOLD = 6;
 	static final int MIN_TREEIFY_CAPACITY = 64;
-	private static final int MIN_TRANSFER_STRIDE = 16;
+	private static final int MIN_TRANSFER_STRIDE = 16;//(ZGQ) 最小步长
 	private static int RESIZE_STAMP_BITS = 16;
 	private static final int MAX_RESIZERS = (1 << (32 - RESIZE_STAMP_BITS)) - 1;
 	private static final int RESIZE_STAMP_SHIFT = 32 - RESIZE_STAMP_BITS;
@@ -31,7 +31,7 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 	transient volatile Node<K,V>[] table;
 	private transient volatile Node<K,V>[] nextTable;
 	private transient volatile long baseCount;
-	private transient volatile int sizeCtl;
+	private transient volatile int sizeCtl;//(ZGQ) 阈值
 	private transient volatile int transferIndex;
 	private transient volatile int cellsBusy;
 	private transient volatile CounterCell[] counterCells;
@@ -210,39 +210,47 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 	/** Implementation for put and putIfAbsent */
 	final V putVal(K key, V value, boolean onlyIfAbsent) {
 		if (key == null || value == null) throw new NullPointerException();
-		int hash = spread(key.hashCode());
-		int binCount = 0;
+		int hash = spread(key.hashCode());//(ZGQ) 根据key计数哈希值
+		int binCount = 0;//(ZGQ) 记录链表的长度
 		for (Node<K,V>[] tab = table;;) {
-			Node<K,V> f; int n, i, fh;
+			Node<K,V> f;
+			int n, i, fh;
 			if (tab == null || (n = tab.length) == 0)
+				//(ZGQ) 若数组的长度为0，就进行初始化
 				tab = initTable();
+			//(ZGQ) tabAt()：通过UnSafe类来获取主内存中Node[]数组下标为i的值
 			else if ((f = tabAt(tab, i = (n - 1) & hash)) == null) {
-				if (casTabAt(tab, i, null,
-						new Node<K,V>(hash, key, value, null)))
+				//(ZGQ) casTabAt()：通过UnSafe()类的compareAndSwapObject()方法添加到Node[]数组下标为i的位置
+				if (casTabAt(tab, i, null, new Node<K,V>(hash, key, value, null)))
 					break;                   // no lock when adding to empty bin
 			}
+			//(ZGQ) 链表的头节点key的哈希值如果等于 -1 ，说明数组正在扩容
 			else if ((fh = f.hash) == MOVED)
 				tab = helpTransfer(tab, f);
 			else {
 				V oldVal = null;
+				/**---ZGQ---
+				 * 当多个线程向同一链表添加节点采用synchronized来进行控制，锁对象是当前链表的头节点
+				 */
 				synchronized (f) {
+					//(ZGQ) 判断链表的头节点是否还是f，若不是需要重新获取头节点f
 					if (tabAt(tab, i) == f) {
 						if (fh >= 0) {
 							binCount = 1;
+							//(ZGQ) 遍历链表
 							for (Node<K,V> e = f;; ++binCount) {
 								K ek;
-								if (e.hash == hash &&
-										((ek = e.key) == key ||
-												(ek != null && key.equals(ek)))) {
+								//(ZGQ) 若有key相同则替换
+								if (e.hash == hash && ((ek = e.key) == key || (ek != null && key.equals(ek)))) {
 									oldVal = e.val;
 									if (!onlyIfAbsent)
 										e.val = value;
 									break;
 								}
+								//(ZGQ) 若没有key相同则采用插入链表的尾部
 								Node<K,V> pred = e;
 								if ((e = e.next) == null) {
-									pred.next = new Node<K,V>(hash, key,
-											value, null);
+									pred.next = new Node<K,V>(hash, key, value, null);
 									break;
 								}
 							}
@@ -250,8 +258,7 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 						else if (f instanceof TreeBin) {
 							Node<K,V> p;
 							binCount = 2;
-							if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key,
-									value)) != null) {
+							if ((p = ((TreeBin<K,V>)f).putTreeVal(hash, key, value)) != null) {
 								oldVal = p.val;
 								if (!onlyIfAbsent)
 									p.val = value;
@@ -261,6 +268,7 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 				}
 				if (binCount != 0) {
 					if (binCount >= TREEIFY_THRESHOLD)
+						//(ZGQ) 链表转红黑树
 						treeifyBin(tab, i);
 					if (oldVal != null)
 						return oldVal;
@@ -268,70 +276,123 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 				}
 			}
 		}
+		/**---ZGQ---
+		 * put()方法向数组添加节点后，对数组节点个数 +1
+		 * remove()方法向数组移除节点后，对数组节点个数 -1
+		 *
+		 * addCount()方法会对数组节点的个数 +1，该方法会完成数组扩容
+		 */
 		addCount(1L, binCount);
 		return null;
 	}
 
+	/**---ZGQ---
+	 * 扩容方法
+	 * @param x
+	 * @param check
+	 */
 	private final void addCount(long x, int check) {
 		CounterCell[] as; long b, s;
-		if ((as = counterCells) != null ||
-				!U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
-			CounterCell a; long v; int m;
+		/**---ZGQ---
+		 * U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)
+		 * 去主内存修改baseCount的值，对其进行 +1 操作，若修改成功返回true，不成功返回false
+		 * 修改不成功会进入if
+		 */
+		if ((as = counterCells) != null || !U.compareAndSwapLong(this, BASECOUNT, b = baseCount, s = b + x)) {
+			CounterCell a;
+			long v;
+			int m;
 			boolean uncontended = true;
-			if (as == null || (m = as.length - 1) < 0 ||
+			if (as == null ||
+					(m = as.length - 1) < 0 ||
+					//(ZGQ) ThreadLocalRandom.getProbe()：线程调用这个方法会生成一个随机数
 					(a = as[ZGQThreadLocalRandom.getProbe() & m]) == null ||
-					!(uncontended =
-							U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
+					//(ZGQ) 使用CAS的方式去对CounterCell对象的value属性进行 +1
+					!(uncontended = U.compareAndSwapLong(a, CELLVALUE, v = a.value, v + x))) {
 				fullAddCount(x, uncontended);
 				return;
 			}
 			if (check <= 1)
 				return;
+			//(ZGQ) 返回值s为ConcurrentHashMap数组已经存放节点的个数
 			s = sumCount();
 		}
 		if (check >= 0) {
-			Node<K,V>[] tab, nt; int n, sc;
-			while (s >= (long)(sc = sizeCtl) && (tab = table) != null &&
-					(n = tab.length) < MAXIMUM_CAPACITY) {
+			Node<K, V>[] tab, nt;
+			int n, sc;
+			while (s >= (long) (sc = sizeCtl) && (tab = table) != null && (n = tab.length) < MAXIMUM_CAPACITY) {
 				int rs = resizeStamp(n);
 				if (sc < 0) {
-					if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
-							sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
-							transferIndex <= 0)
+					if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 || sc == rs + MAX_RESIZERS || (nt = nextTable) == null || transferIndex <= 0)
 						break;
 					if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
+						//(ZGQ) 从旧数组转移节点到新数组
 						transfer(tab, nt);
-				}
-				else if (U.compareAndSwapInt(this, SIZECTL, sc,
-						(rs << RESIZE_STAMP_SHIFT) + 2))
+				} else if (U.compareAndSwapInt(this, SIZECTL, sc, (rs << RESIZE_STAMP_SHIFT) + 2))
 					transfer(tab, null);
+				//(ZGQ) 计数新数组已经存放的节点个数
 				s = sumCount();
 			}
 		}
 	}
 
+	/**---ZGQ---
+	 * 从旧数组转移节点到新数组
+	 * @param tab 旧数组
+	 * @param nextTab 新数组
+	 */
 	private final void transfer(Node<K,V>[] tab, Node<K,V>[] nextTab) {
 		int n = tab.length, stride;
+		/**---ZGQ---
+		 * NCPU：cpu核数
+		 * 计数步长
+		 */
 		if ((stride = (NCPU > 1) ? (n >>> 3) / NCPU : n) < MIN_TRANSFER_STRIDE)
+			//(ZGQ) 最小步长为16
 			stride = MIN_TRANSFER_STRIDE; // subdivide range
 		if (nextTab == null) {            // initiating
 			try {
 				@SuppressWarnings("unchecked")
+				//(ZGQ) 创建新数组，大小为原数组的2倍
 				Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n << 1];
+				//(ZGQ) nextTab为新数组
 				nextTab = nt;
 			} catch (Throwable ex) {      // try to cope with OOME
 				sizeCtl = Integer.MAX_VALUE;
 				return;
 			}
 			nextTable = nextTab;
+			/**---ZGQ---
+			 * 1）transferIndex = 旧数组长度
+			 * 2）当线程转移了一个步长后（加入步长=2），transferIndex = transferIndex - 2
+			 */
 			transferIndex = n;
 		}
-		int nextn = nextTab.length;
+		int nextn = nextTab.length;//(ZGQ) 新数组大小
+		/**---ZGQ---
+		 * 创建ForwardingNode对象
+		 * 当将旧数组下标为2的位置的元素转移到新数组后，把ForwardingNode对象放到旧数组下标为2的位置
+		 * 这样当别的线程来往就数组下标为2的位置put元素时，发现是ForwardingNode对象说明就数组正在扩容
+		 * 当线程发现旧数组正在扩容，会调用helpTransfer()方法帮助扩容，帮助转移完后会通过循环重新获取新数组进行put
+		 */
 		ForwardingNode<K,V> fwd = new ForwardingNode<K,V>(nextTab);
+		//(ZGQ) 当前线程正在转移数组的某个位置，advance表示当前线程是否需要向前继续转移数组其他位置的元素
 		boolean advance = true;
+		/**---ZGQ---
+		 * 表示当前线程的转移工作是否做完
+		 * 当finishing = true时说明已经完成了转移，会将新数组的引用赋给ConcurrentHashMap的table属性
+		 */
 		boolean finishing = false; // to ensure sweep before committing nextTab
+
+		/**---ZGQ---
+		 * 加入旧数组长度为16，在转移时是从数组尾部开始转移的，假设计数出来的步长为4，那么i、bound分别为：i：15  bound：11
+		 * 线程就负责转移旧数组下标从11到下标15位置的元素，在转移过程i = 15会递减，直到等于bound = 11为止
+		 * 总的来说：i 和 bound是控制线程转移数组的范围
+		 * 问题：有没有不同线程计数出来的i、bound相同的可能？    不可能，不同线程调用CAS最终只有一个线程能成功
+		 */
 		for (int i = 0, bound = 0;;) {
-			Node<K,V> f; int fh;
+			Node<K,V> f;
+			int fh;
 			while (advance) {
 				int nextIndex, nextBound;
 				if (--i >= bound || finishing)
@@ -340,10 +401,7 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 					i = -1;
 					advance = false;
 				}
-				else if (U.compareAndSwapInt
-						(this, TRANSFERINDEX, nextIndex,
-								nextBound = (nextIndex > stride ?
-										nextIndex - stride : 0))) {
+				else if (U.compareAndSwapInt(this, TRANSFERINDEX, nextIndex, nextBound = (nextIndex > stride ? nextIndex - stride : 0))) {
 					bound = nextBound;
 					i = nextIndex - 1;
 					advance = false;
@@ -364,11 +422,13 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 					i = n; // recheck before commit
 				}
 			}
-			else if ((f = tabAt(tab, i)) == null)
+			else if ((f = tabAt(tab, i)) == null)//(ZGQ) 获取旧数组下标为i位置的元素，若为空进入if
+				//(ZGQ) 若为空，则将数组下标为i的位置放入ForwardingNode对象
 				advance = casTabAt(tab, i, null, fwd);
 			else if ((fh = f.hash) == MOVED)
 				advance = true; // already processed
 			else {
+				//(ZGQ) 加锁
 				synchronized (f) {
 					if (tabAt(tab, i) == f) {
 						Node<K,V> ln, hn;
@@ -397,9 +457,9 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 								else
 									hn = new Node<K,V>(ph, pk, pv, hn);
 							}
-							setTabAt(nextTab, i, ln);
-							setTabAt(nextTab, i + n, hn);
-							setTabAt(tab, i, fwd);
+							setTabAt(nextTab, i, ln);//(ZGQ)
+							setTabAt(nextTab, i + n, hn);//(ZGQ)
+							setTabAt(tab, i, fwd);//(ZGQ)
 							advance = true;
 						}
 						else if (f instanceof TreeBin) {
@@ -428,10 +488,8 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 									++hc;
 								}
 							}
-							ln = (lc <= UNTREEIFY_THRESHOLD) ? untreeify(lo) :
-									(hc != 0) ? new TreeBin<K,V>(lo) : t;
-							hn = (hc <= UNTREEIFY_THRESHOLD) ? untreeify(hi) :
-									(lc != 0) ? new TreeBin<K,V>(hi) : t;
+							ln = (lc <= UNTREEIFY_THRESHOLD) ? untreeify(lo) : (hc != 0) ? new TreeBin<K,V>(lo) : t;
+							hn = (hc <= UNTREEIFY_THRESHOLD) ? untreeify(hi) : (lc != 0) ? new TreeBin<K,V>(hi) : t;
 							setTabAt(nextTab, i, ln);
 							setTabAt(nextTab, i + n, hn);
 							setTabAt(tab, i, fwd);
@@ -490,12 +548,15 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 		}
 	}
 
-
-
 	static final int resizeStamp(int n) {
 		return Integer.numberOfLeadingZeros(n) | (1 << (RESIZE_STAMP_BITS - 1));
 	}
 
+	/**---ZGQ---
+	 *
+	 * @param x 1
+	 * @param wasUncontended false
+	 */
 	private final void fullAddCount(long x, boolean wasUncontended) {
 		int h;
 		if ((h = ZGQThreadLocalRandom.getProbe()) == 0) {
@@ -539,8 +600,7 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 					collide = false;            // At max size or stale
 				else if (!collide)
 					collide = true;
-				else if (cellsBusy == 0 &&
-						U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
+				else if (cellsBusy == 0 && U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
 					try {
 						if (counterCells == as) {// Expand table unless stale
 							CounterCell[] rs = new CounterCell[n << 1];
@@ -554,10 +614,17 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 					collide = false;
 					continue;                   // Retry with expanded table
 				}
+				/**---ZGQ---
+				 * 同一个线程多次调用：ThreadLocalRandom.getProbe()得到同一个随机数
+				 * 同一个线程多次调用：ThreadLocalRandom.advanceProbe();得到不同的随机数
+				 */
 				h = ZGQThreadLocalRandom.advanceProbe(h);
 			}
-			else if (cellsBusy == 0 && counterCells == as &&
-					U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
+			/**---ZGQ---
+			 * cellsBusy表示是否有线程在使用counterCells[]数组，0表示没有
+			 *
+			 */
+			else if (cellsBusy == 0 && counterCells == as && U.compareAndSwapInt(this, CELLSBUSY, 0, 1)) {
 				boolean init = false;
 				try {                           // Initialize table
 					if (counterCells == as) {
@@ -604,21 +671,21 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 				int rs = resizeStamp(n);
 				if (sc < 0) {
 					Node<K,V>[] nt;
-					if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 ||
-							sc == rs + MAX_RESIZERS || (nt = nextTable) == null ||
-							transferIndex <= 0)
+					if ((sc >>> RESIZE_STAMP_SHIFT) != rs || sc == rs + 1 || sc == rs + MAX_RESIZERS || (nt = nextTable) == null || transferIndex <= 0)
 						break;
 					if (U.compareAndSwapInt(this, SIZECTL, sc, sc + 1))
 						transfer(tab, nt);
-				}
-				else if (U.compareAndSwapInt(this, SIZECTL, sc,
-						(rs << RESIZE_STAMP_SHIFT) + 2))
+				} else if (U.compareAndSwapInt(this, SIZECTL, sc, (rs << RESIZE_STAMP_SHIFT) + 2))
 					transfer(tab, null);
 			}
 		}
 	}
 
-
+	/**---ZGQ---
+	 * 链表转红黑树，也会加锁
+	 * @param tab
+	 * @param index
+	 */
 	private final void treeifyBin(Node<K,V>[] tab, int index) {
 		Node<K,V> b; int n, sc;
 		if (tab != null) {
@@ -627,17 +694,17 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 			else if ((b = tabAt(tab, index)) != null && b.hash >= 0) {
 				synchronized (b) {
 					if (tabAt(tab, index) == b) {
-						TreeNode<K,V> hd = null, tl = null;
+						//(ZGQ) 1-先将链表改为双向链表
+						TreeNode<K,V> hd = null, tl = null;//(ZGQ) hd是双向链表的头节点
 						for (Node<K,V> e = b; e != null; e = e.next) {
-							TreeNode<K,V> p =
-									new TreeNode<K,V>(e.hash, e.key, e.val,
-											null, null);
+							TreeNode<K,V> p = new TreeNode<K,V>(e.hash, e.key, e.val, null, null);
 							if ((p.prev = tl) == null)
 								hd = p;
 							else
 								tl.next = p;
 							tl = p;
 						}
+						//(ZGQ) 2-再将链表改为红黑树，在红黑树的节点类型TreeBin的构造方法内完成链表转为红黑树
 						setTabAt(tab, index, new TreeBin<K,V>(hd));
 					}
 				}
@@ -645,8 +712,11 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 		}
 	}
 
+	/**---ZGQ---
+	 * 红黑树节点的类型
+	 */
 	static final class TreeBin<K,V> extends Node<K,V> {
-		TreeNode<K,V> root;
+		TreeNode<K,V> root;//(ZGQ) 红黑树的根节点
 		volatile TreeNode<K,V> first;
 		volatile Thread waiter;
 		volatile int lockState;
@@ -1213,13 +1283,17 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 			else if (U.compareAndSwapInt(this, SIZECTL, sc, -1)) {
 				try {
 					if ((tab = table) == null || tab.length == 0) {
+						//(ZGQ) 初始化数组大小为16
 						int n = (sc > 0) ? sc : DEFAULT_CAPACITY;
 						@SuppressWarnings("unchecked")
+						//(ZGQ) 创建数组，并指定大小
 						Node<K,V>[] nt = (Node<K,V>[])new Node<?,?>[n];
 						table = tab = nt;
+						//(ZGQ) 数组扩容的阈值
 						sc = n - (n >>> 2);
 					}
 				} finally {
+					//(ZGQ) 数组扩容的阈值
 					sizeCtl = sc;
 				}
 				break;
@@ -1979,7 +2053,7 @@ public class ZGQConcurrentHashMap8<K,V> implements Serializable {
 			addCount(delta, -1);
 	}
 
-
+	//(ZGQ) 计数CPU核数
 	static final int NCPU = Runtime.getRuntime().availableProcessors();
 
 	private static final ObjectStreamField[] serialPersistentFields = {

@@ -7,9 +7,13 @@ public class TestHashMapDemo {
 
 	@Test
 	public void testMethod() {
-		ConcurrentHashMap<String, String> hashMap = new ConcurrentHashMap<>();
+		ConcurrentHashMap<String, String> concurrentHashMap = new ConcurrentHashMap<>();
 
-		hashMap.put("key_zgq","value_zgq");
+		concurrentHashMap.put("key_zgq","value_zgq");
+
+		concurrentHashMap.size();
+
+		concurrentHashMap.remove("key_zgq");
 
 	}
 
