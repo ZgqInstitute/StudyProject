@@ -218,7 +218,7 @@ public class ZGQHashMap8<K,V> implements Serializable {
 				}
 			}
 
-			//(ZGQ) 若能进入if的话，说明新增节点的key与头节点的key相同
+			//(ZGQ) 若能进入if的话，说明新增节点的key与头节点或链表或红黑树的key相同
 			if (e != null) { // existing mapping for key
 				//(ZGQ) 先将头节点的value保存到oldValue
 				V oldValue = e.value;
@@ -524,7 +524,7 @@ public class ZGQHashMap8<K,V> implements Serializable {
 						 *         3.1 比较key的Class名字，若还相等再比较3.2
 						 *         3.2 System.identityHashCode(key)
 						 *
-						 * 补充：identityHashCode(key)方法：当一个类重写的hashCode()方法，但是现在又不想使用重写的hashCode()方法，就可以使用identityHashCode()方法来获得哈希值
+						 * 补充：identityHashCode(key)方法：当一个类重写了hashCode()方法，但是现在又不想使用重写的hashCode()方法，就可以使用identityHashCode()方法来获得哈希值
 						 */
 						int dir, ph;
 						K pk = p.key;//(ZGQ) 根节点的key
@@ -581,7 +581,8 @@ public class ZGQHashMap8<K,V> implements Serializable {
 			boolean searched = false;
 			TreeNode<K,V> root = (parent != null) ? root() : this;
 			for (TreeNode<K,V> p = root;;) {
-				int dir, ph; K pk;
+				int dir, ph;
+				K pk;
 				if ((ph = p.hash) > h)
 					dir = -1;
 				else if (ph < h)
