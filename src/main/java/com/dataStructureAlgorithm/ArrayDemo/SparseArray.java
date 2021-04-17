@@ -8,14 +8,15 @@ public class SparseArray {
 	@Test
 	public void testMethod() {
 
+		//定义普通二维数组
 		int[][] commonArray = {
 				{0, 0, 2, 0},
 				{0, 0, 0, 0},
 				{3, 0, 1, 0},
 				{0, 0, 0, 9},
-				{0, 7, 0, 0},
-				{0, 7, 0, 0},
-				{0, 7, 0, 0}
+				{0, 0, 0, 0},
+				{0, 0, 0, 0},
+				{0, 0, 0, 0}
 		};
 
 		int[][] sparseArray = commonToSparseArray(commonArray);
