@@ -138,8 +138,8 @@
 //
 //    @Override
 //    public void lockInterruptibly(long leaseTime, TimeUnit unit) throws InterruptedException {
-//        long threadId = Thread.currentThread().getId();
-//        Long ttl = tryAcquire(leaseTime, unit, threadId);
+//        long threadId = Thread.currentThread().getId();//获取当前的线程id
+//        Long ttl = tryAcquire(leaseTime, unit, threadId);//获取锁。若返回null表示获取到了
 //        // lock acquired
 //        if (ttl == null) {
 //            return;
@@ -196,10 +196,20 @@
 //    }
 //
 //    private <T> RFuture<Long> tryAcquireAsync(long leaseTime, TimeUnit unit, final long threadId) {
-//        if (leaseTime != -1) {
+//        /*-------ZGQ-----
+//         * 锁的过期时间leaseTime等于使用的是lock(10, TimeUnit.SECONDS)方法的入参，leaseTime=10
+//         * tryLockInnerAsync()方法就是去redis设置key
+//         */
+//        if (leaseTime != -1) {//当使用的是lock(10, TimeUnit.SECONDS)方法时，leaseTime=10 会进入if
 //            return tryLockInnerAsync(leaseTime, unit, threadId, RedisCommands.EVAL_LONG);
 //        }
+//
+//        //当使用lock()方法时没有指定锁的过期时间就不会进入if
+//        /*-------ZGQ-----
+//         * 锁的过期时间leaseTime=commandExecutor.getConnectionManager().getCfg().getLockWatchdogTimeout() 看门狗时间30秒
+//         */
 //        RFuture<Long> ttlRemainingFuture = tryLockInnerAsync(commandExecutor.getConnectionManager().getCfg().getLockWatchdogTimeout(), TimeUnit.MILLISECONDS, threadId, RedisCommands.EVAL_LONG);
+//
 //        ttlRemainingFuture.addListener(new FutureListener<Long>() {//上面的设置key方法tryLockInnerAsync()是异步方法，当设置key成功会回调operationComplete()方法
 //            @Override
 //            public void operationComplete(Future<Long> future) throws Exception {
@@ -227,10 +237,14 @@
 //            return;
 //        }
 //
-//        Timeout task = commandExecutor.getConnectionManager().newTimeout(new TimerTask() {//定时任务。每 看门狗时间/3 进行定时检查，执行run()方法
+//        /**---ZGQ---
+//         * 开启定时任务。每过 看门狗时间/3=10秒 进行定时检查，执行run()方法
+//         */
+//        Timeout task = commandExecutor.getConnectionManager().newTimeout(new TimerTask() {
 //            @Override
 //            public void run(Timeout timeout) throws Exception {
 //
+//                //renewExpirationAsync()方法就是对key重新设置过期时间
 //                RFuture<Boolean> future = renewExpirationAsync(threadId);
 //
 //                future.addListener(new FutureListener<Boolean>() {
@@ -250,6 +264,10 @@
 //                });
 //            }
 //
+//        /*------ZGQ---
+//         * 定时任务多久执行一次？
+//         *   每隔  看门狗时间/3=10秒  执行一次  也就是每过10秒执行一次，就是20的时候会进行续期，重新续期到30秒
+//         */
 //        }, internalLockLeaseTime / 3, TimeUnit.MILLISECONDS);
 //
 //        if (expirationRenewalMap.putIfAbsent(getEntryName(), new ExpirationEntry(threadId, task)) != null) {
@@ -302,6 +320,10 @@
 //        return RedissonPromise.newSucceededFuture(null);
 //    }
 //
+//    /**
+//     * tryLock()方法一般用于特定满足需求的场合，但不建议作为一般需求的分布式锁，一般分布式锁建议用void lock(long leaseTime, TimeUnit unit)。
+//     * 因为从性能上考虑，在高并发情况下后者效率是前者的好几倍
+//     */
 //    @Override
 //    public boolean tryLock(long waitTime, long leaseTime, TimeUnit unit) throws InterruptedException {
 //        long time = unit.toMillis(waitTime);
@@ -309,10 +331,12 @@
 //        final long threadId = Thread.currentThread().getId();
 //        Long ttl = tryAcquire(leaseTime, unit, threadId);
 //        // lock acquired
+//        //获取锁同时获取成功的情况下，和lock(...)方法是一样的 直接返回True，没有获取到锁再往下走
 //        if (ttl == null) {
 //            return true;
 //        }
 //
+//        //如果超过了尝试获取锁的等待时间,当然返回false 了。
 //        time -= (System.currentTimeMillis() - current);
 //        if (time <= 0) {
 //            acquireFailed(threadId);
@@ -320,7 +344,13 @@
 //        }
 //
 //        current = System.currentTimeMillis();
+//        //订阅监听redis消息，并且创建RedissonLockEntry，其中RedissonLockEntry中比较关键的是一个 Semaphore属性对象,
+//        //用来控制本地的锁请求的信号量同步，返回的是netty框架的Future实现。
 //        final RFuture<RedissonLockEntry> subscribeFuture = subscribe(threadId);
+//
+//        //  阻塞等待subscribe的future的结果对象，如果subscribe方法调用超过了time，说明已经超过了客户端设置的最大wait time，
+//        //  则直接返回false，取消订阅，不再继续申请锁了。
+//        //  只有await返回true，才进入循环尝试获取锁
 //        if (!await(subscribeFuture, time, TimeUnit.MILLISECONDS)) {
 //            if (!subscribeFuture.cancel(false)) {
 //                subscribeFuture.addListener(new FutureListener<RedissonLockEntry>() {
@@ -343,14 +373,18 @@
 //                return false;
 //            }
 //
+//            //4、如果没有超过尝试获取锁的等待时间，那么通过While一直获取锁。最终只会有两种结果
+//            //1)、在等待时间内获取锁成功 返回true。2）等待时间结束了还没有获取到锁那么返回false。
 //            while (true) {
 //                long currentTime = System.currentTimeMillis();
 //                ttl = tryAcquire(leaseTime, unit, threadId);
 //                // lock acquired
+//                // 获取锁成功
 //                if (ttl == null) {
 //                    return true;
 //                }
 //
+//                // 获取锁失败
 //                time -= (System.currentTimeMillis() - currentTime);
 //                if (time <= 0) {
 //                    acquireFailed(threadId);
