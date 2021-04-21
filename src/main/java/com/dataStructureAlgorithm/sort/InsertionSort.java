@@ -2,6 +2,8 @@ package com.dataStructureAlgorithm.sort;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 插入排序
  *
@@ -9,22 +11,24 @@ import org.junit.Test;
 public class InsertionSort {
 	@Test
 	public void test() {
-		int[] a = {66, 5, 12, 4, 10, 6};//{6, 5, 4, 3, 2, 1}
-//		sort(a);
+		int[] a = {5, 11, 7, 1, 10, 6};
+		sort(a);
 	}
 
-	public void sort(int[] array){
+	public void sort(int[] array) {
 
-		for(int i = 0; i < array.length - 1; i++){
-			int minIndex = 1;
-			int min = array[i];
-			for(int j = i; j < array.length; j++){
-//				if(){
-//
-//				}
+		for (int i = 1; i < array.length; i++) {
+			int insertVal = array[i];
+			int insertIndex = i -1;
+
+			while (insertIndex >= 0 && insertVal < array[insertIndex]) {
+				array[insertIndex + 1] = array[insertIndex];
+				insertIndex -= 1;
 			}
-
+			array[insertIndex + 1] = insertVal;
 		}
+
+		System.out.println(Arrays.toString(array));
 	}
 
 }
