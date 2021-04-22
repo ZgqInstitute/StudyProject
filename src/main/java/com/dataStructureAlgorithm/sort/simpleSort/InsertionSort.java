@@ -1,4 +1,4 @@
-package com.dataStructureAlgorithm.sort;
+package com.dataStructureAlgorithm.sort.simpleSort;
 
 import org.junit.Test;
 
