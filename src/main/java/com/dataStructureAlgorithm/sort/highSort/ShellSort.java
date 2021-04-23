@@ -6,40 +6,38 @@ import java.util.Arrays;
 
 /**
  * 希尔排序
- * 希尔排序是插入排序的改进，也称为缩小增量排序。
+ *      希尔排序是插入排序的改进，也称为缩小增量排序。
  */
 public class ShellSort {
 
-	//{8,9,1,7,2,3,5,4,6,0}
 	@Test
 	public void test() {
-		int[] a = {8, 9, 1, 7, 2, 3, 5, 4, 6, 0};//{3, 5, 1, 6, 0, 8, 9, 4, 7, 2} —> {3, 5, 1, 6, 0, 8, 9, 4, 7, 2}
+		int[] a = {8, 9, 1, 7, 2, 3, 5, 4, 6, 0};//{3, 5, 1, 6, 0, 8, 9, 4, 7, 2} —> {0, 2, 1, 4, 3, 5, 7, 6, 9, 8}
 		sort(a);
 	}
 
-	//[1, 0, 5, 3, 4, 6, 2, 7, 8, 9]
-
 	public void sort(int[] array) {
+		//控制分组的个数
+		for (int len = array.length / 2; len > 0; len = len / 2) {
 
-		for (int length = array.length / 2; length >= 1; length = length / 2) {
-			for (int i = 0; i < array.length; i++) {
-				if ((i + length) < array.length) {
-					if (array[i] > array[i + length]) {
+			for (int i = len; i < array.length; i++) {
+				//j=2-2=0  0>=0
+				//j=3-2=1  1>=0
+				//j=4-2=2  2>=0      j=2-2=0  0>=0
+
+				for (int j = i - len; j >= 0; j = j - len) {
+					if (array[j] > array[j + len]) {
 						int temp;
-						temp = array[i];
-						array[i] = array[i + length];
-						array[i + length] = temp;
-					}
-				}else {
-					break;
+						temp = array[j];
+						array[j] = array[j + len];
+						array[j + len] = temp;
+					} else
+						break;
 				}
 			}
 		}
 
 		System.out.println(Arrays.toString(array));
-
-
 	}
-
 
 }
