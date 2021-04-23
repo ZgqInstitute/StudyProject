@@ -21,10 +21,6 @@ public class ShellSort {
 		for (int len = array.length / 2; len > 0; len = len / 2) {
 
 			for (int i = len; i < array.length; i++) {
-				//j=2-2=0  0>=0
-				//j=3-2=1  1>=0
-				//j=4-2=2  2>=0      j=2-2=0  0>=0
-
 				for (int j = i - len; j >= 0; j = j - len) {
 					if (array[j] > array[j + len]) {
 						int temp;
