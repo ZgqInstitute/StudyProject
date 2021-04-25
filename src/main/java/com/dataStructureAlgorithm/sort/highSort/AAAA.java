@@ -26,9 +26,9 @@ public class AAAA {
 		//diGui()方法第 4 次入栈
 		System.out.println("diGui()方法第" + (5 - n + 1) + "次《入》栈");
 		//temp = 5 * diGui(4)
-		//temp = 5 * diGui(4) * diGui(3)
-		//temp = 5 * diGui(4) * diGui(3) * diGui(2)
-		//temp = 5 * diGui(4) * diGui(3) * diGui(2) * diGui(1)
+		//temp = 4 * diGui(3)
+		//temp = 3 * diGui(2)
+		//temp = 2 * diGui(1)
 		temp = n * diGui(n - 1);
 		System.out.println("diGui()方法第" + (n - 1) + "次《出》栈");
 		return temp;

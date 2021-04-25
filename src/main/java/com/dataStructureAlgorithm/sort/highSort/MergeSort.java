@@ -8,7 +8,7 @@ import org.junit.Test;
 public class MergeSort {
 	@Test
 	public void test() {
-		int[] a = {26, 5, 98, 108, 28, 99, 100, 56, 34, 1};
+		int[] a = {9, 3, 6, 1, 5, 8, 4, 2};
 		printArray("排序前：", a);
 		MergeSort(a);
 		printArray("排序后：", a);
@@ -23,14 +23,13 @@ public class MergeSort {
 
 	//对数组中所有元素进行排序
 	private void MergeSort(int[] a) {
-		// TODO Auto-generated method stub
 		System.out.println("开始排序");
 		//调用sort()方法对数组a的部分进行排序
-		Sort(a, 0, a.length - 1);
+		sort(a, 0, a.length - 1);
 	}
 
 	//对数组从left到right的元素进行排序
-	private void Sort(int[] a, int left, int right) {
+	private void sort(int[] a, int left, int right) {
 		if (left >= right)
 			return;
 
@@ -38,8 +37,8 @@ public class MergeSort {
 		int mid = (left + right) / 2;
 
 		//二路归并排序就将原数组分为2个组。（注：多路归并排序里面写多个Sort就可以了）
-		Sort(a, left, mid);//一个组
-		Sort(a, mid + 1, right);//另一个组
+		sort(a, left, mid);//一个组
+		sort(a, mid + 1, right);//另一个组
 
 		//再对2个组进行归并
 		merge(a, left, mid, right);
