@@ -8,7 +8,7 @@ import org.junit.Test;
 public class MergeSort {
 	@Test
 	public void test() {
-		int[] a = {9, 3, 6, 1, 5, 8, 4, 2};
+		int[] a = {8, 4, 5, 7, 1, 3, 6, 2};
 		printArray("排序前：", a);
 		MergeSort(a);
 		printArray("排序后：", a);
@@ -37,7 +37,9 @@ public class MergeSort {
 		int mid = (left + right) / 2;
 
 		//二路归并排序就将原数组分为2个组。（注：多路归并排序里面写多个Sort就可以了）
+		//向左递归进行分解
 		sort(a, left, mid);//一个组
+		//向右递归进行分解
 		sort(a, mid + 1, right);//另一个组
 
 		//再对2个组进行归并
@@ -50,7 +52,7 @@ public class MergeSort {
 	 * 把数组a中的这两个子组的数据合并成一个有序的大组（从索引left到索引right）
 	 */
 	private void merge(int[] a, int left, int mid, int right) {
-		//完成归并操作需要的辅助数组
+		//完成归并操作需要的辅助数组，需要额外的空间。以空间换时间
 		int[] tmp = new int[a.length];
 
 		//定义3个指针
