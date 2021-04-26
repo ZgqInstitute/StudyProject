@@ -14,13 +14,6 @@ public class MergeSort {
 		printArray("排序后：", a);
 	}
 
-	private void printArray(String pre, int[] a) {
-		System.out.print(pre + "\n");
-		for (int i = 0; i < a.length; i++)
-			System.out.print(a[i] + "\t");
-		System.out.println();
-	}
-
 	//对数组中所有元素进行排序
 	private void mergeSort(int[] a) {
 		System.out.println("开始排序");
@@ -97,7 +90,12 @@ public class MergeSort {
 		System.out.println();
 	}
 
-
+	private void printArray(String pre, int[] a) {
+		System.out.print(pre + "\n");
+		for (int i = 0; i < a.length; i++)
+			System.out.print(a[i] + "\t");
+		System.out.println();
+	}
 
 }
 
