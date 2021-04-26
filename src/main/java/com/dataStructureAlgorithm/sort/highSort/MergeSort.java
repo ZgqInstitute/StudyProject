@@ -49,42 +49,42 @@ public class MergeSort {
 		int[] tmp = new int[a.length];
 
 		//定义3个指针
-		int i = left;//指向辅助数组的第一个索引处
-		int p1 = left;//指向左子组的第一个索引
+		int i = left;//指向左子组的第一个索引
+		int p1 = left;//指向辅助数组的第一个索引处
 		int p2 = mid + 1;//指向右子组的第一个索引
 
 		//逐个归并
 		while (left <= mid && p2 <= right) {
 			if (a[left] <= a[p2]) {
-				tmp[p1] = a[left];
-				p1 = p1 + 1;
+				tmp[i] = a[left];
+				i = i + 1;
 				left = left + 1;
 			}
 			else {
-				tmp[p1] = a[p2];
-				p1 = p1 + 1;
+				tmp[i] = a[p2];
+				i = i + 1;
 				p2 = p2 + 1;
 			}
 		}
 		//判断左子组是否全部遍历完，若左子组没有遍历完则顺序的将左子组剩余的元素移动到辅助数组对应的索引处
 		while (left <= mid) {
-			tmp[p1] = a[left];
-			p1 = p1 + 1;
+			tmp[i] = a[left];
+			i = i + 1;
 			left = left + 1;
 		}
 		//判断右子组是否全部遍历完，若右子组没有遍历完则顺序的将右子组剩余的元素移动到辅助数组对应的索引处
 		while (p2 <= right) {
-			tmp[p1] = a[p2];
-			p1 = p1 + 1;
+			tmp[i] = a[p2];
+			i = i + 1;
 			p2 = p2 + 1;
 		}
 
 		//将辅助数组拷贝到原数组
-		while (i <= right) {
-			a[i] = tmp[i];
+		while (p1 <= right) {
+			a[p1] = tmp[p1];
 			//输出中间归并排序结果
-			System.out.print(a[i] + "\t");
-			i++;
+			System.out.print(a[p1] + "\t");
+			p1++;
 		}
 
 		System.out.println();
