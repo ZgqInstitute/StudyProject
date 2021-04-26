@@ -5,6 +5,7 @@ import org.junit.Test;
 import java.util.Arrays;
 
 /**
+ * ！！！！！！！太妙了！！！！！！！！！
  * 归并排序
  */
 public class MergeSort {
@@ -23,7 +24,14 @@ public class MergeSort {
 		sort(a, 0, a.length - 1);
 	}
 
-	//对数组从left到right的元素进行排序
+	/**
+	 * 对数组从left到right的元素进行排序
+	 * 对sort方法的总结：
+	 *     当sort(a, 0, 1)则会调用sort中的merge方法对a数组索引从0到1进行排序
+	 *     当sort(a, 0, 3)则会调用sort中的merge方法对a数组索引从0到3进行排序
+	 *          注：在调用merge方法对0到3索引进行排序前，数组a索引0到1(左边的一组)和2到3(右边的一组)这两个组已经通过各自的sort方法排好序了，
+	 *              所以sort(a, 0, 3)中的merge方法就是对数组a索引从0到3进行排序
+	 */
 	private void sort(int[] a, int left, int right) {
 		if (left >= right)
 			return;
@@ -43,11 +51,12 @@ public class MergeSort {
 
 	/**
 	 * 合并方法
-	 * 数组a从索引left到索引mid为一个子组，索引mid+1到索引right为另一个分组；
-	 * 把数组a中的这两个子组的数据合并成一个有序的大组（从索引left到索引right）
+	 *      数组a从索引left到索引mid为一个子组，索引mid+1到索引right为另一个分组；
+	 *      把数组a中的这两个子组的数据合并成一个有序的大组（从索引left到索引right）
 	 */
 	private void merge(int[] a, int left, int mid, int right) {
-		//定义完成归并操作需要的辅助数组。需要额外的空间，以空间换时间   每一次调用merge方法都会重新创建tmp数组
+		//定义完成归并操作需要的辅助数组。需要额外的空间，以空间换时间
+		//每一次调用merge方法都会重新创建tmp数组
 		int[] tmp = new int[a.length];
 
 		//定义3个指针
