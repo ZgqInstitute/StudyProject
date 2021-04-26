@@ -10,7 +10,7 @@ public class MergeSort {
 	public void test() {
 		int[] a = {8, 4, 5, 7, 1, 3, 6, 2};
 		printArray("排序前：", a);
-		MergeSort(a);
+		mergeSort(a);
 		printArray("排序后：", a);
 	}
 
@@ -22,7 +22,7 @@ public class MergeSort {
 	}
 
 	//对数组中所有元素进行排序
-	private void MergeSort(int[] a) {
+	private void mergeSort(int[] a) {
 		System.out.println("开始排序");
 		//调用sort()方法对数组a的部分进行排序
 		sort(a, 0, a.length - 1);
@@ -85,8 +85,6 @@ public class MergeSort {
 			p1 = p1 + 1;
 			p2 = p2 + 1;
 		}
-
-		//System.out.println("第" + (++number) + "趟排序:\t");
 
 		//将辅助数组拷贝到原数组
 		while (i <= right) {
