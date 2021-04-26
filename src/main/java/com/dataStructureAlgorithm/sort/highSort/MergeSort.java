@@ -53,34 +53,37 @@ public class MergeSort {
 		//完成归并操作需要的辅助数组
 		int[] tmp = new int[a.length];
 
-		int r1 = mid + 1;
-		int tIndex = left;
-		int cIndex = left;
-		// 逐个归并
-		while (left <= mid && r1 <= right) {
-			if (a[left] <= a[r1])
-				tmp[tIndex++] = a[left++];
+		//定义3个指针
+		int i = left;//指向辅助数组的第一个索引处
+		int p1 = left;//指向左子组的第一个索引
+		int p2 = mid + 1;//指向右子组的第一个索引
+
+		//逐个归并
+		while (left <= mid && p2 <= right) {
+			if (a[left] <= a[p2])
+				tmp[p1++] = a[left++];
 			else
-				tmp[tIndex++] = a[r1++];
+				tmp[p1++] = a[p2++];
 		}
-		// 将左边剩余的归并
+		//判断左子组是否全部遍历完，若左子组没有遍历完则顺序的将左子组剩余的元素移动到辅助数组对应的索引处
 		while (left <= mid) {
-			tmp[tIndex++] = a[left++];
+			tmp[p1++] = a[left++];
 		}
-		// 将右边剩余的归并
-		while (r1 <= right) {
-			tmp[tIndex++] = a[r1++];
+		//判断右子组是否全部遍历完，若右子组没有遍历完则顺序的将右子组剩余的元素移动到辅助数组对应的索引处
+		while (p2 <= right) {
+			tmp[p1++] = a[p2++];
 		}
 
 		//System.out.println("第" + (++number) + "趟排序:\t");
-		//TODO Auto-generated method stub
-		//从临时数组拷贝到原数组
-		while (cIndex <= right) {
-			a[cIndex] = tmp[cIndex];
+
+		//将辅助数组拷贝到原数组
+		while (i <= right) {
+			a[i] = tmp[i];
 			//输出中间归并排序结果
-			System.out.print(a[cIndex] + "\t");
-			cIndex++;
+			System.out.print(a[i] + "\t");
+			i++;
 		}
+
 		System.out.println();
 	}
 
