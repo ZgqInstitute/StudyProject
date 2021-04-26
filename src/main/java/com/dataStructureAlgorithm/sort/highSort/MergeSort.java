@@ -49,8 +49,9 @@ public class MergeSort {
 		int[] tmp = new int[a.length];
 
 		//定义3个指针
-		int i = left;//指向左子组的第一个索引
-		int p1 = left;//指向辅助数组的第一个索引处
+		int i = left;//指向辅助数组的第一个索引处
+
+		int p1 = left;//指向左子组的第一个索引
 		int p2 = mid + 1;//指向右子组的第一个索引
 
 		//逐个归并
