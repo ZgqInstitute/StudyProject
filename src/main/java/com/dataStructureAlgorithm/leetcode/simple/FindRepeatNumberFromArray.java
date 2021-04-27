@@ -1,4 +1,4 @@
-package com.dataStructureAlgorithm.leetcode.aboutArrayTopic;
+package com.dataStructureAlgorithm.leetcode.simple;
 
 import org.junit.Test;
 
