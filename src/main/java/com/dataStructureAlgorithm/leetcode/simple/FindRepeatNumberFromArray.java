@@ -14,6 +14,12 @@ import java.util.Set;
  * 输入： [2, 3, 1, 0, 2, 5, 3]
  * 输出：2 或 3
  * 限制：2 <= n <= 100000
+ *
+ * ===================================================
+ *
+ * 得出的结论：set集合set成功返回true，set失败返回false
+ *
+ * ====================================================
  */
 public class FindRepeatNumberFromArray {
 
@@ -49,7 +55,7 @@ public class FindRepeatNumberFromArray {
 	 *     时间复杂度：O(n)
 	 */
 	public int findRepeatNumber02(int[] nums) {
-		Set<Integer> set = new HashSet<Integer>();
+		Set<Integer> set = new HashSet<>();
 		int repeat = -1;
 		for (int num : nums) {
 			if (!set.add(num)) {
