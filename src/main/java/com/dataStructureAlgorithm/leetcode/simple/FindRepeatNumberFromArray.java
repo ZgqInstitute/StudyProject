@@ -15,7 +15,7 @@ import java.util.Set;
  * 输出：2 或 3
  * 限制：2 <= n <= 100000
  *
- * ===================================================
+ * String s = Integer.toBinaryString(x);
  *
  * 得出的结论：set集合set成功返回true，set失败返回false
  *
