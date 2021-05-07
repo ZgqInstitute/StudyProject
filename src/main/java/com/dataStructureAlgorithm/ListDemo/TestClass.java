@@ -17,5 +17,11 @@ public class TestClass {
             System.out.println(linkedList.get(i));
         }
 
+        System.out.println();
+
+        linkedList.insert(2,100);
+        for(int i = 0; i < linkedList.length(); i++){
+            System.out.println(linkedList.get(i));
+        }
     }
 }
