@@ -42,6 +42,8 @@ public class LinkedListDemo<T> {
     public void insert(T t) {
         if(len == 0){
             head.next = new Node(t, null);
+            len++;
+            return;
         }
         Node last = head.next;
         while (last.next != null) {
