@@ -5,12 +5,12 @@ import org.junit.Test;
 /**
  * 反转单向链表，采用递归方法进行反转
  */
-public class ReverseListWay01 {
+public class ReverseList {
 
     private Node head;
     private int len;
 
-    public ReverseListWay01() {
+    public ReverseList() {
         this.head = new Node(null, null);
         this.len = 0;
     }
@@ -45,22 +45,47 @@ public class ReverseListWay01 {
         len++;
     }
 
-    //反转整个链表
-    public void reverseList(ReverseListWay01 reverseListWay01) {
+    /**
+     * 反转整个链表
+     * 反转链表方法一：采用递归的方式进行反转
+     */
+    public void reverseList(ReverseList reverseList) {
         //传入头结点
-        reverseNode(reverseListWay01.head.next);
+        reverseNodeWay01(reverseList.head.next);
     }
 
     //反转单个节点
-    public Node reverseNode(Node node) {
+    public Node reverseNodeWay01(Node node) {
         if (node.next == null) {
             head.next = node;
             return node;
         }
-        Node pre = reverseNode(node.next);
+        Node pre = reverseNodeWay01(node.next);
         pre.next = node; //这一步关键
         node.next = null; //这一步关键
         return node;
+    }
+
+    /**
+     * 反转链表方法二：不采用递归的方式进行反转
+     */
+    public void reverseNodeWay02() {
+        Node curr = head.next;
+        Node next = null;
+
+        //定义新链表的头结点
+        Node newHead = new Node(null, null);
+        while (curr != null) {
+            //先将当前节点的下一个节点保存到next中
+            next = curr.next;
+            //太妙了！！
+            curr.next = newHead.next;
+            //新链表的头结点始终指向新遍历到的节点
+            newHead.next = curr;
+            //将当前节点后移
+            curr = next;
+        }
+        head = newHead;
     }
 
     private class Node {
@@ -75,23 +100,19 @@ public class ReverseListWay01 {
 
     @Test
     public void test() {
-        ReverseListWay01 reverseListWay01 = new ReverseListWay01();
-        reverseListWay01.insert(1);
-        reverseListWay01.insert(2);
-        reverseListWay01.insert(3);
-        reverseListWay01.insert(4);
-        for (int i = 0; i < reverseListWay01.length(); i++) {
-            System.out.println(reverseListWay01.get(i));
+        ReverseList reverseList = new ReverseList();
+        reverseList.insert(1);
+        reverseList.insert(2);
+        reverseList.insert(3);
+        reverseList.insert(4);
+        for (int i = 0; i < reverseList.length(); i++) {
+            System.out.println(reverseList.get(i));
         }
-
         System.out.println();
-
-        reverseListWay01.reverseList(reverseListWay01);
-        for (int i = 0; i < reverseListWay01.length(); i++) {
-            System.out.println(reverseListWay01.get(i));
+        reverseList.reverseNodeWay02();
+        for (int i = 0; i < reverseList.length(); i++) {
+            System.out.println(reverseList.get(i));
         }
-
-
     }
 }
 
