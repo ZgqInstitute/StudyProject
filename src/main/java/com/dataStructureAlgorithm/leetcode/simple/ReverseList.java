@@ -2,6 +2,8 @@ package com.dataStructureAlgorithm.leetcode.simple;
 
 import org.junit.Test;
 
+import java.util.Arrays;
+
 /**
  * 反转单向链表，采用递归方法进行反转
  */
@@ -86,6 +88,20 @@ public class ReverseList {
             curr = next;
         }
         head = newHead;
+    }
+
+    /**
+     * 从尾到头打印链表
+     */
+    public int[] reversePrint(){
+        int[] arr = new int[len];
+        Node node = head.next;
+        for(int i = 1; i <= len; i++){
+            arr[len - i] = node.data.intValue();
+            node = node.next;
+        }
+        System.out.println(Arrays.toString(arr));
+        return arr;
     }
 
     private class Node {
