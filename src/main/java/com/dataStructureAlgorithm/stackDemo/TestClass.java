@@ -11,9 +11,9 @@ public class TestClass {
         integerStack.push(2);
         integerStack.push(3);
 
-        System.out.println(integerStack.pop());
-        System.out.println(integerStack.pop());
-        System.out.println(integerStack.pop());
+        System.out.println(integerStack.pop() + "----" + integerStack.size());
+        System.out.println(integerStack.pop() + "----" + integerStack.size());
+        System.out.println(integerStack.pop() + "----" + integerStack.size());
 
     }
 }
