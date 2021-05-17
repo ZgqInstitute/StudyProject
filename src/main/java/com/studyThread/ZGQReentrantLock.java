@@ -15,15 +15,22 @@ public class ZGQReentrantLock implements Lock, java.io.Serializable {
 
         abstract void lock();
 
+        /**---ZGQ---
+         * @param acquires 当线程没有获取到锁从ReentrantLock的acquire()方法进入到这，acquires = 1
+         */
         final boolean nonfairTryAcquire(int acquires) {
-            final Thread current = Thread.currentThread();
-            int c = getState();
-            if (c == 0) {
+            final Thread current = Thread.currentThread();//ZGQ  得到当前未获取到锁的线程
+            int c = getState();//ZGQ   获取AQS的state，由于进入到这AQS的state=1
+            if (c == 0) {//ZGQ  当未获取到锁的线程执行到这时，获取到锁的线程刚好释放了锁将state置为0，所以未获取到锁的线程就能进入if
                 if (compareAndSetState(0, acquires)) {
-                    setExclusiveOwnerThread(current);
+                    setExclusiveOwnerThread(current);//ZGQ 刚开始未获取到锁的线程现在获取到了锁，并设置当前是自己占有了锁
                     return true;
                 }
             }
+            /**---ZGQ---
+             * current：是当前未获取到锁的线程；
+             * getExclusiveOwnerThread()：是获取当前占有锁的线程
+             */
             else if (current == getExclusiveOwnerThread()) {
                 int nextc = c + acquires;
                 if (nextc < 0) // overflow
@@ -78,12 +85,20 @@ public class ZGQReentrantLock implements Lock, java.io.Serializable {
         private static final long serialVersionUID = 7316153563782823691L;
 
         final void lock() {
+            /**---ZGQ---
+             * 当state=0表示锁未被占有时才可以进入if
+             *    expect：期望是0（0表示当前锁没有被占用）；
+             *    update：若state = 0 则将state置为1
+             */
             if (compareAndSetState(0, 1))
+                //ZGQ  设置现在是哪个线程占有锁
                 setExclusiveOwnerThread(Thread.currentThread());
             else
+                //当state=1表示锁已经被占有，则进入else。会调用AQS的acquire()方法
                 acquire(1);
         }
 
+        //这个方法就是实现父类AQS的tryAcquire()方法
         protected final boolean tryAcquire(int acquires) {
             return nonfairTryAcquire(acquires);
         }

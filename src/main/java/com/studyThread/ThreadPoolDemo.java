@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.util.concurrent.ExecutorService;
 import java.util.concurrent.Executors;
+import java.util.concurrent.locks.ReentrantLock;
 
 /**
  * 使用线程池
@@ -12,6 +13,9 @@ public class ThreadPoolDemo {
 
 	@Test
 	public void test() {
+
+		ReentrantLock reentrantLock = new ReentrantLock();
+
 		//使用newFixedThreadPool线程池
 		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
 

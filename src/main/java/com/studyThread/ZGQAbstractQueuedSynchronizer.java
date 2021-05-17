@@ -116,16 +116,27 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
 
     static final long spinForTimeoutThreshold = 1000L;
 
+    /**---ZGQ---
+     *  enq方法是真正将未获取到锁的线程加入到等待队列中的方法
+     * @param node 未获取到锁的线程
+     */
     private Node enq(final Node node) {
         for (;;) {
-            Node t = tail;
-            if (t == null) { // Must initialize
+            Node t = tail;//ZGQ  将AQS队列的尾指针赋值给t
+
+            //ZGQ  刚开始AQS等待队列中没有线程，所以tail=null
+            if (t == null) {//ZGQ  进入if是创建等待队列的头结点，初始化等待队列
+                /**---ZGQ---
+                 * 能进入if说明现在的等待队列还是空的，则创建一个空node作为等待队列的头结点（注：等待队列中第一个节点不是未获取到锁的节点线程，而是创建的新节点）
+                 * 这个新创建的节点node不是入参中的node（未获取到锁的线程），这个新创建的节点就是起到占位的作用，也叫傀儡节点、哨兵节点
+                 */
                 if (compareAndSetHead(new Node()))
-                    tail = head;
+                    tail = head;//ZGQ  将头结点也赋值给尾结点
             } else {
-                node.prev = t;
+                node.prev = t;//ZGQ 使未获取到锁的节点的prev指针指向尾结点
+                //ZGQ  设置尾结点  将未获取到锁的线程节点设为尾结点
                 if (compareAndSetTail(t, node)) {
-                    t.next = node;
+                    t.next = node;//ZGQ  将头结点的next指针指向未获取到锁的线程节点
                     return t;
                 }
             }
@@ -140,17 +151,30 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         return unsafe.compareAndSwapObject(this, tailOffset, expect, update);
     }
 
+    /**---ZGQ---
+     * 当线程为获取到锁，就会调用addWaiter()方法进入等待队列
+     */
     private Node addWaiter(Node mode) {
+        //ZGQ  node为当前未获取到锁的线程。模式为mode —>EXCLUSIVE 表示线程正在以独占的方式等待锁
         Node node = new Node(Thread.currentThread(), mode);
-        // Try the fast path of enq; backup to full enq on failure
+
         Node pred = tail;
+
+        /**---ZGQ---
+         *  当第2个未获取到锁的线程过来时，此时tail不为null，则pred也不为null，则进入if
+         *  当等待队列不为空时，未获取到锁的节点要加入等待队列就不是走enq()方法，直接进入if执行加入等待队列的代码
+         */
         if (pred != null) {
-            node.prev = pred;
-            if (compareAndSetTail(pred, node)) {
-                pred.next = node;
+            node.prev = pred;//ZGQ  将第2个未获取到锁的线程节点的prev指针指向尾结点
+            if (compareAndSetTail(pred, node)) {//ZGQ  设置尾指针。将第2个未获取到锁的线程节点设置为尾指针
+                pred.next = node;//ZGQ  原来的尾结点的next指针指向第2个未获取到锁的线程节点
                 return node;
             }
         }
+
+        /**---ZGQ---
+         * 当等待队列为空时，未获取到锁的节点要加入等待队列走的是enq()方法
+         */
         enq(node);
         return node;
     }
@@ -297,6 +321,10 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
                 cancelAcquire(node);
         }
     }
+
+    /**---ZGQ---
+     * 这个方法直接抛异常，目的就是要求子类一定要实现这个方法
+     */
     protected boolean tryAcquire(int arg) {
         throw new UnsupportedOperationException();
     }
@@ -459,9 +487,17 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         throw new UnsupportedOperationException();
     }
 
+    /**---ZGQ---
+     * 当线程没有获取到锁时，会进入AQS的acquire()方法
+     */
     public final void acquire(int arg) {
-        if (!tryAcquire(arg) &&
-                acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
+        /**---ZGQ---
+         * 这里有3个方法：
+         *   1）tryAcquire(); 尝试获取锁
+         *   2）addWaiter();  未获取到锁的线程进等待队列
+         *   3）acquireQueued();
+         */
+        if (!tryAcquire(arg) && acquireQueued(addWaiter(Node.EXCLUSIVE), arg))
             selfInterrupt();
     }
 
