@@ -7,7 +7,7 @@
         <property name="name" value="大中国"></property>
     </bean>
 
-   <!-- <bean id="b" class="com.studyFrame.springDemo.circularDependencies.B">
+   <!-- <bean id="b" class="com.studyFrame.springDemo.circularDependencies.ThreadLocalDemo">
         <property name="a" ref="a"></property>
     </bean>-->
 

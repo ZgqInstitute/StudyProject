@@ -1,4 +1,4 @@
-package com.studyThread.ThreadPoolTest;
+package com.studyThread;
 
 import org.junit.Test;
 
