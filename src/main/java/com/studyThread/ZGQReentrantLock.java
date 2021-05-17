@@ -41,15 +41,25 @@ public class ZGQReentrantLock implements Lock, java.io.Serializable {
             return false;
         }
 
+        /**---ZGQ---
+         * 之前占有锁的线程开始解锁
+         */
         protected final boolean tryRelease(int releases) {
+            /**---ZGQ---
+             * getState() = 1
+             * releases = 1
+             * 所以 c = 0
+             */
             int c = getState() - releases;
             if (Thread.currentThread() != getExclusiveOwnerThread())
                 throw new IllegalMonitorStateException();
             boolean free = false;
             if (c == 0) {
                 free = true;
+                //ZGQ  设置当前锁的占有线程为null
                 setExclusiveOwnerThread(null);
             }
+            //ZGQ 将状态改为0
             setState(c);
             return free;
         }
@@ -158,6 +168,7 @@ public class ZGQReentrantLock implements Lock, java.io.Serializable {
     }
 
     public void unlock() {
+        //ZGQ  调用lock.unlock()方法，底层调用的是sync.release()方法
         sync.release(1);
     }
 

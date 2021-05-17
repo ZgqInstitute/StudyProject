@@ -180,24 +180,26 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
     }
 
     private void setHead(Node node) {
-        head = node;
-        node.thread = null;
-        node.prev = null;
+        head = node;//ZGQ  将等待队列中获取到锁的线程(头结点的下一个节点)设置为等待队列的头结点
+        node.thread = null;//ZGQ  将等待队列中获取到锁的线程的thread属性置为null
+        node.prev = null;//ZGQ  将等待队列中获取到锁的线程的prev指针置为null
     }
 
     private void unparkSuccessor(Node node) {
         int ws = node.waitStatus;
         if (ws < 0)
+            //ZGQ 将线程节点的withStatus设置为0
             compareAndSetWaitStatus(node, ws, 0);
 
-        Node s = node.next;
-        if (s == null || s.waitStatus > 0) {
+        Node s = node.next;//ZGQ 获取头结点的下一个节点（第一个未获取到锁的线程）
+        if (s == null || s.waitStatus > 0) {//if内的条件为false
             s = null;
             for (Node t = tail; t != null && t != node; t = t.prev)
                 if (t.waitStatus <= 0)
                     s = t;
         }
         if (s != null)
+            //ZGQ 唤醒头结点的下一个节点
             LockSupport.unpark(s.thread);
     }
 
@@ -276,8 +278,13 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         return unsafe.compareAndSwapObject(node, nextOffset, expect, update);
     }
 
+    /**---ZGQ---
+     *
+     * @param pred 未获取到锁线程的前一个节点（头结点）
+     * @param node 未获取到锁线程的前一个节点
+     */
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
-        int ws = pred.waitStatus;
+        int ws = pred.waitStatus;//头结点的waitStatus为0
         if (ws == Node.SIGNAL)
             return true;
         if (ws > 0) {
@@ -286,6 +293,7 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
             } while (pred.waitStatus > 0);
             pred.next = node;
         } else {
+            //ZGQ  改变头结点的waitStatus的值，从 0 改为 -1
             compareAndSetWaitStatus(pred, ws, Node.SIGNAL);
         }
         return false;
@@ -295,30 +303,66 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         Thread.currentThread().interrupt();
     }
 
+    /**---ZGQ---
+     * 未获取到锁的线程通过这个方法将自己冻结
+     */
     private final boolean parkAndCheckInterrupt() {
+        /**---ZGQ---
+         * 获取到锁的线程会调用LockSupport的park()方法将自己冻结
+         * 注：线程调用park()方法才是真正的进入等待队列！！！
+         */
         LockSupport.park(this);
         return Thread.interrupted();
     }
 
+    /**---ZGQ---
+     *
+     * @param node 未获取到锁的线程
+     * @param arg
+     * @return
+     */
     final boolean acquireQueued(final Node node, int arg) {
         boolean failed = true;
         try {
             boolean interrupted = false;
             for (;;) {
-                final Node p = node.predecessor();
+                final Node p = node.predecessor();//ZGQ  得到未获取到锁线程的前一个节点（头结点）
+                /**---ZGQ---
+                 * p == head —> true
+                 * tryAcquire(arg) —> 未获取到锁的线程尝试再次获取锁失败，false
+                 *
+                 * 当持有锁的线程释放锁后，那未获取到锁的线程执行tryAcquire()方法的返回值就为true
+                 */
                 if (p == head && tryAcquire(arg)) {
+                    /**---ZGQ---
+                     * setHead()方法做了3件事：
+                     *   1）将等待队列中获取到锁的线程(头结点的下一个节点)设置为等待队列的头结点
+                     *   2）将等待队列中获取到锁的线程的thread属性置为null
+                     *   3）将等待队列中获取到锁的线程的prev指针置为null
+                     */
                     setHead(node);
+
+                    /**---ZGQ---
+                     * 之前的哨兵节点将没有指针指向，成为了垃圾;
+                     * 新获取到锁的线程节点成为了新的哨兵节点（头结点）
+                     */
                     p.next = null; // help GC
                     failed = false;
                     return interrupted;
                 }
-                if (shouldParkAfterFailedAcquire(p, node) &&
-                        parkAndCheckInterrupt())
+
+                /**---ZGQ---
+                 * 第一个未获取到锁的线程调用shouldParkAfterFailedAcquire()方法返回值为false;
+                 * 第一个未获取到锁的线程调用shouldParkAfterFailedAcquire()方法返回值为true;
+                 *
+                 * parkAndCheckInterrupt()方法中会调用LockSupport.park()，相当于拿走线程的许可证
+                 */
+                if (shouldParkAfterFailedAcquire(p, node) && parkAndCheckInterrupt())
                     interrupted = true;
             }
         } finally {
             if (failed)
-                cancelAcquire(node);
+                cancelAcquire(node);//ZGQ  从等待队列中删除
         }
     }
 
@@ -517,10 +561,25 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
                 doAcquireNanos(arg, nanosTimeout);
     }
 
+    /**---ZGQ---
+     * 调用lock.unlock()底层调用的就是AQS的release()方法
+     */
     public final boolean release(int arg) {
+        /**---ZGQ---
+         * tryRelease()方法做的事：
+         *   1）tryRelease()方法会将state从1改为0
+         *   2）设置当前持有锁的线程为null
+         */
         if (tryRelease(arg)) {
             Node h = head;
+            /**---ZGQ---
+             * h为头结点
+             * 头结点的waitStatus为-1
+             */
             if (h != null && h.waitStatus != 0)
+                /**---ZGQ---
+                 *
+                 */
                 unparkSuccessor(h);
             return true;
         }

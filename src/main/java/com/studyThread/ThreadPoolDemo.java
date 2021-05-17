@@ -15,6 +15,9 @@ public class ThreadPoolDemo {
 	public void test() {
 
 		ReentrantLock reentrantLock = new ReentrantLock();
+		reentrantLock.lock();
+
+		reentrantLock.unlock();
 
 		//使用newFixedThreadPool线程池
 		ExecutorService fixedThreadPool = Executors.newFixedThreadPool(2);
