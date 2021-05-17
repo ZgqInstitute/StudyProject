@@ -12,6 +12,12 @@ import java.util.concurrent.locks.LockSupport;
 
 /**
  * 学习 AbstractQueuedSynchronizer
+ *
+ * AQS学习总结：
+ *   1）AQS = CLH + state同步状态；  CLH队列是一个双向队列；
+ *
+ *
+ *
  */
 public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         implements java.io.Serializable {
@@ -42,26 +48,23 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         } catch (Exception ex) { throw new Error(ex); }
     }
 
+    /**---ZGQ---
+     * 用Node来封装未抢到锁的线程
+     */
     static final class Node {
+        static final Node SHARED = new Node();//ZGQ  表示线程以共享的模式等待锁
+        static final Node EXCLUSIVE = null;//ZGQ  表示线程正在以独占的方式等待锁
 
-        static final Node SHARED = new Node();
-
-        static final Node EXCLUSIVE = null;
-
-        static final int CANCELLED =  1;
-
-        static final int SIGNAL    = -1;
-
-        static final int CONDITION = -2;
-
-        static final int PROPAGATE = -3;
-
+        static final int CANCELLED =  1;//ZGQ  cancelled 表示线程获取锁的请求已经取消了
+        static final int SIGNAL    = -1;//ZGQ  signal 表示线程已经准备好了，就等资源释放了
+        static final int CONDITION = -2;//ZGQ  condition 表示线程正在队列中，节点线程等待唤醒
+        static final int PROPAGATE = -3;//ZGQ  propagate
+        /**---ZGQ---
+         * 表示当前阻塞线程在队列中的等待状态。有上面几种状态：1   -1   -2   -3
+         */
         volatile int waitStatus;
-
-        volatile Node prev;
-
-        volatile Node next;
-
+        volatile Node prev;//指向前一个节点
+        volatile Node next;//指向后一个节点
         volatile Thread thread;
 
         Node nextWaiter;
@@ -91,10 +94,16 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
         }
     }
 
+    private transient volatile Node head;//指向双端队列CLH的头节点
+    private transient volatile Node tail;//指向双端队列CLH的尾节点
 
-    private transient volatile Node head;
-    private transient volatile Node tail;
+    /**---ZGQ---
+     * 使用state来表示同步状态，state判断是否阻塞
+     *   state = 0 表示锁没有被占用；
+     *   state >= 1 表示锁已结被占用；
+     */
     private volatile int state;
+
     protected final int getState() {
         return state;
     }

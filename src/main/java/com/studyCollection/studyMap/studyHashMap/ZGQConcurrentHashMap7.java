@@ -5,7 +5,7 @@
 //import java.util.Map;
 //import java.util.Set;
 //import java.util.concurrent.ConcurrentHashMap;
-//import java.util.concurrent.locks.ReentrantLock;
+//import java.util.concurrent.locks.ZGQZGQReentrantLock;
 //
 //public class ZGQConcurrentHashMap7<K, V> {
 //
@@ -254,7 +254,7 @@
 //		}
 //	}
 //
-//	static final class Segment<K, V> extends ReentrantLock implements Serializable {
+//	static final class Segment<K, V> extends ZGQZGQReentrantLock implements Serializable {
 //		private static final long serialVersionUID = 2249069246763182397L;
 //		static final int MAX_SCAN_RETRIES = Runtime.getRuntime().availableProcessors() > 1 ? 64 : 1;
 //		/**---ZGQ---
@@ -279,7 +279,7 @@
 //
 //			/**---ZGQ---
 //			 * 获取锁：
-//			 *   1）先使用ReentrantLock的tryLock()方法尝试获取锁，若获取到了就返回空的node
+//			 *   1）先使用ZGQReentrantLock的tryLock()方法尝试获取锁，若获取到了就返回空的node
 //			 *   2）若没有获取到锁，则调用scanAndLockForPut()方法：
 //			 *        scanAndLockForPut()方法会先使用tryLock()再lock()的方式获取锁，当tryLock()没有获取到锁但不会阻塞，还可以执行其他任务，如创建HashEntry对象
 //			 */
