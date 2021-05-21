@@ -1,4 +1,4 @@
-package com.studyThread;
+package com.studyThread.studyReentrantLock;
 
 import sun.misc.Unsafe;
 
@@ -110,7 +110,14 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
     protected final void setState(int newState) {
         state = newState;
     }
+
+    /**---ZGQ---
+     * 更新状态值
+     * @param expect 期望值
+     * @param update 更新值
+     */
     protected final boolean compareAndSetState(int expect, int update) {
+        //ZGQ  stateOffset是偏移量
         return unsafe.compareAndSwapInt(this, stateOffset, expect, update);
     }
 
@@ -152,7 +159,7 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
     }
 
     /**---ZGQ---
-     * 当线程为获取到锁，就会调用addWaiter()方法进入等待队列
+     * 当线程未获取到锁，就会调用addWaiter()方法进入等待队列
      */
     private Node addWaiter(Node mode) {
         //ZGQ  node为当前未获取到锁的线程。模式为mode —>EXCLUSIVE 表示线程正在以独占的方式等待锁

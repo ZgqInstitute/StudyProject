@@ -94,6 +94,14 @@
             <version>4.3.12.RELEASE</version>
         </dependency>
 
+        <!--可以使用jol来查看java对象的布局-->
+        <dependency>
+            <groupId>org.openjdk.jol</groupId>
+            <artifactId>jol-core</artifactId>
+            <version>0.10</version>
+            <scope>provided</scope>
+        </dependency>
+
     </dependencies>
 
     <!--这个插件，可以将应用打包成一个可执行的jar包-->

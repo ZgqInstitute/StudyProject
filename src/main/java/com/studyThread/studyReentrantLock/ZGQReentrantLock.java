@@ -1,4 +1,4 @@
-package com.studyThread;
+package com.studyThread.studyReentrantLock;
 
 import java.util.Collection;
 import java.util.concurrent.TimeUnit;
@@ -96,7 +96,7 @@ public class ZGQReentrantLock implements Lock, java.io.Serializable {
 
         final void lock() {
             /**---ZGQ---
-             * 当state=0表示锁未被占有时才可以进入if
+             * 当state=0表示锁未被占用时才可以进入if
              *    expect：期望是0（0表示当前锁没有被占用）；
              *    update：若state = 0 则将state置为1
              */
