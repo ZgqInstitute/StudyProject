@@ -1,7 +1,5 @@
 package com.studyReflect.entity;
 
-import java.util.ArrayList;
-
 public class Person {
 
 	private String name;

@@ -288,7 +288,7 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
     /**---ZGQ---
      *
      * @param pred 未获取到锁线程的前一个节点（头结点）
-     * @param node 未获取到锁线程的前一个节点
+     * @param node 未获取到锁的线程
      */
     private static boolean shouldParkAfterFailedAcquire(Node pred, Node node) {
         int ws = pred.waitStatus;//头结点的waitStatus为0
@@ -325,7 +325,7 @@ public class ZGQAbstractQueuedSynchronizer extends AbstractOwnableSynchronizer
     /**---ZGQ---
      *
      * @param node 未获取到锁的线程
-     * @param arg
+     * @param arg  AQS的state的状态 1
      * @return
      */
     final boolean acquireQueued(final Node node, int arg) {

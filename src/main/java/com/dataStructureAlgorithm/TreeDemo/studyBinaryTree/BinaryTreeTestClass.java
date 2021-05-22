@@ -8,27 +8,19 @@ public class BinaryTreeTestClass {
 	public void TestMethod() {
 		//创建二叉树
 		BinaryTree binaryTree = new BinaryTree();
-		//创建节点
-		PersonNode root = new PersonNode(1, "宋江");
-		PersonNode node2 = new PersonNode(2, "吴用");
-		PersonNode node3 = new PersonNode(3, "卢俊义");
-		PersonNode node4 = new PersonNode(4, "林冲");
+		binaryTree.put(10);
+		binaryTree.put(6);
+		binaryTree.put(12);
+		binaryTree.put(3);
+		binaryTree.put(7);
+		binaryTree.put(11);
+		binaryTree.put(17);
 
-		//设置节点间的关系
-		root.setLeft(node2);
-		root.setRight(node3);
-		node3.setRight(node4);
+		binaryTree.preOrder( binaryTree.getRoot());
+//		System.out.println();
+//		binaryTree.infixOrder(binaryTree.getRoot());
+//		binaryTree.postOrder(binaryTree.getRoot());
 
-		System.out.println("前序遍历");
-		binaryTree.setRoot(root);
-		binaryTree.preOrder();
-
-		System.out.println();
-		System.out.println("中序遍历");
-		binaryTree.infixOrder();
-
-		System.out.println();
-		System.out.println("后序遍历");
-		binaryTree.postOrder();
+//		System.out.println(binaryTree.isExist(binaryTree.getRoot(),122));
 	}
 }
