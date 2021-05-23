@@ -13,8 +13,8 @@ public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 		BeanDefinition bd = beanFactory.getBeanDefinition("jinmao");
 		MutablePropertyValues mutablePropertyValues =  bd.getPropertyValues();
 		if (mutablePropertyValues.contains("name")) {
-			System.out.println("修改Dog的BeanDefinition信息");
-			mutablePropertyValues.addPropertyValue("name", "哈士奇");
+			System.out.println("修改Dog的BeanDefinition信息666666666666666666666677777777777777777777777778888888888888888888888888888888");
+			mutablePropertyValues.addPropertyValue("name", "哈士奇==============================================");
 		}
 
 	}

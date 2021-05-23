@@ -15,4 +15,9 @@ public class ConfigClass02 {
 	public MyBeanFactoryPostProcessor myBeanFactoryPostProcessor(){
 		return new MyBeanFactoryPostProcessor();
 	}
+
+	@Bean
+	public Dog dog(){
+		return new Dog();
+	}
 }

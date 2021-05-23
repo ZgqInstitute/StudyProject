@@ -5,7 +5,7 @@ public class Dog {
 	private String name;
 
 	public Dog(){
-		System.out.println("Dog的构造函数执行");
+		System.out.println("Dog的构造函数执行>>>>>>>>>>>>>>>>>>>>>>>");
 	}
 
 	public String getName() {

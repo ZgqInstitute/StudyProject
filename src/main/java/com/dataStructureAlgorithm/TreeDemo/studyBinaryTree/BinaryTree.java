@@ -132,6 +132,28 @@ public class BinaryTree {
     }
 
     /**
+     * 获取二叉树的最大深度
+     */
+    public int maxDepth(){
+        return maxDepth(root);
+    }
+
+    public int maxDepth(Node node) {
+        if (node == null) {
+            return 0;
+        }
+        int maxLeft = 0;
+        int maxRight = 0;
+        if (node.left != null) {
+            maxLeft = maxDepth(node.left);
+        }
+        if (node.right != null) {
+            maxRight = maxDepth(node.right);
+        }
+        return maxLeft > maxRight ? maxLeft + 1 : maxRight + 1;
+    }
+
+    /**
      * 节点内部类，封装节点数据
      */
     public class Node {
