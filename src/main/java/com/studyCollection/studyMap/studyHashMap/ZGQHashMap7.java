@@ -86,8 +86,12 @@
 //		init();
 //	}
 //
+//    /**---ZGQ---
+//     * 新增元素
+//     */
 //	public V put(K key, V value) {
 //		if (table == EMPTY_TABLE) {
+//		    //ZGQ 第一次put元素数组为空，会创建数组
 //			inflateTable(threshold);
 //		}
 //
@@ -103,7 +107,8 @@
 //		int i = indexFor(hash, table.length);
 //
 //		/**---ZGQ---
-//		 * 若put的元素要存入数组的下标为2，这个循环就是遍历hashMap数组下标为2上的链表
+//         * 这个循环就是遍历链表，看链表中是否有key与新增节点的key相等
+//		 * 若put的元素要存入数组的下标为2，这个循环就是遍历hashMap数组下标为2位置的链表
 //		 * 看这个链表上是否有与put的元素key相等的对象，若有则进行替换
 //		 *
 //		 * 问题：put元素时采用头插法的好处？
@@ -170,6 +175,8 @@
 //				/**---ZGQ---
 //				 *  1）这里先把原数组下标为2的第一个元素的next属性先赋给next保存起来，因为后面要对这个next属性赋null
 //				 *  2）将原数组下标为2的第二个元素的next属性先赋给next保存起来
+//				 *
+//				 *  注：在多线程环境下，当t1线程和t2线程同时来扩容，t2线程执行完这一行代码cpu就切换到t1线程，直到t1线程全部完成转移，t2线程再开始工作
 //				 */
 //				Entry<K, V> next = e.next;
 //				if (rehash) {
@@ -195,7 +202,7 @@
 //				newTable[i] = e;
 //
 //				/**---ZGQ---
-//				 * 1-将原数组下标为2的第二个元素赋给e
+//				 * 1-将原数组下标为2的第二个元素赋给e      ！！！！！！妙！！！！！！
 //				 * 2-将原数组下标为2的第三个元素赋给e
 //				 */
 //				e = next;
@@ -205,7 +212,7 @@
 //
 //	void addEntry(int hash, K key, V value, int bucketIndex) {
 //		/**---ZGQ---
-//		 * 扩容有2个条件：
+//		 * 能进入if说明需要扩容，扩容有2个条件：
 //		 * 条件1：size >= threshold
 //		 *    size：此时数组已经存放了几个元素
 //		 *    阈值：threshold = 数组的长度 * 加载因子0.75 = 16 * 0.75 = 12
@@ -218,9 +225,13 @@
 //			bucketIndex = indexFor(hash, table.length);
 //		}
 //
+//		//ZGQ 不扩容就走这个方法
 //		createEntry(hash, key, value, bucketIndex);
 //	}
 //
+//    /**---ZGQ---
+//     * 不扩容就走这个方法
+//     */
 //	void createEntry(int hash, K key, V value, int bucketIndex) {
 //		Entry<K, V> e = table[bucketIndex];
 //		//(ZGQ) 将新put的对象插入数组对应位置的头部，再将链表向下移动
@@ -255,9 +266,7 @@
 //		return h & (length - 1);
 //	}
 //
-//	/**
-//	 * ---ZGQ---
-//	 *
+//	/**---ZGQ---
 //	 * @param toSize = threshold 在构造函数中确定的大小16
 //	 */
 //	private void inflateTable(int toSize) {
@@ -293,6 +302,9 @@
 //		return number >= MAXIMUM_CAPACITY ? MAXIMUM_CAPACITY : (number > 1) ? Integer.highestOneBit((number - 1) << 1) : 1;
 //	}
 //
+//	/**---ZGQ---
+//	 * 当key = null走这个方法
+//	 */
 //	private V putForNullKey(V value) {
 //		//遍历数组下标为0的位置
 //		for (Entry<K, V> e = table[0]; e != null; e = e.next) {
@@ -310,8 +322,12 @@
 //	}
 //
 //	void init() {
+//	    //ZGQ 在LinkedHashMap有对应实现
 //	}
 //
+//    /**---ZGQ---
+//     * 该对象用来封装key  value
+//     */
 //	static class Entry<K, V> implements Map.Entry<K, V> {
 //		final K key;
 //		V value;

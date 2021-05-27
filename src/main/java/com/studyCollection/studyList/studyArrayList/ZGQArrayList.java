@@ -25,6 +25,7 @@ public class ZGQArrayList<E> {
 
 	public boolean add(E e) {
 		ensureCapacityInternal(size + 1);  // Increments modCount!!
+		//ZGQ 直接在尾部添加
 		elementData[size++] = e;
 		return true;
 	}

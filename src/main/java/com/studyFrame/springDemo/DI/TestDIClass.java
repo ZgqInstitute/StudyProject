@@ -9,8 +9,8 @@ public class TestDIClass {
 
 	@Test
 	public void testMethod(){
-//		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ConfigClass.class);
-		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("springTestCircleRelyOn.xml");
+		AnnotationConfigApplicationContext applicationContext = new AnnotationConfigApplicationContext(ConfigClass.class);
+//		ClassPathXmlApplicationContext applicationContext = new ClassPathXmlApplicationContext("springTestCircleRelyOn.xml");
 		China china = applicationContext.getBean(China.class);
 		System.out.println(china.getName());
 
