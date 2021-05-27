@@ -1,18 +1,19 @@
 //package com.studyCollection.studyMap.studyHashMap;
 //
+//import com.studyThread.studyReentrantLock.ZGQReentrantLock;
+//
 //import java.io.Serializable;
 //import java.util.Collection;
 //import java.util.Map;
 //import java.util.Set;
 //import java.util.concurrent.ConcurrentHashMap;
-//import java.util.concurrent.locks.ZGQZGQReentrantLock;
 //
 //public class ZGQConcurrentHashMap7<K, V> {
 //
 //	/**
 //	 * ---ZGQ---
 //	 * 这个16指的是ConcurrentHashMap的所有Segment的所有HashEntry数组大小和，
-//	 * 由DEFAULT_INITIAL_CAPACITY / EFAULT_CONCURRENCY_LEVEL可以得到每一个Segment中的HashEntry数组大小
+//	 * 注：由DEFAULT_INITIAL_CAPACITY / EFAULT_CONCURRENCY_LEVEL可以得到每一个Segment中的HashEntry数组大小
 //	 */
 //	static final int DEFAULT_INITIAL_CAPACITY = 16;
 //	static final float DEFAULT_LOAD_FACTOR = 0.75f;
@@ -120,7 +121,7 @@
 //		 * 1）第二个参数(int) (cap * loadFactor)是扩容条件，指的是Segment内的HashEntry[]数组超过这个就会扩容；
 //		 *    是Segment内的HashEntry[]数组扩容，而不是ConcurrentHashMap的数组Segment[]扩容
 //		 * 2）s0会存放到Segment数组Segment<K, V>[] ss的第0个位置
-//		 * 3）这个s0还有一个作用：当新put的元素如果要添加到ConcurrentHashMap数组Segment[]的第二个位置，此时新创建的Segment会使用到s0的一些属性
+//		 * 3）这个s0还有一个作用：当新put的元素如果要添加到ConcurrentHashMap数组Segment[]新的位置，此时新创建的Segment会使用到s0的一些属性
 //		 */
 //		Segment<K, V> s0 = new Segment<K, V>(loadFactor, (int) (cap * loadFactor), (HashEntry<K, V>[]) new HashEntry[cap]);
 //		//(ZGQ) 创建一个空的Segment数组
@@ -254,7 +255,7 @@
 //		}
 //	}
 //
-//	static final class Segment<K, V> extends ZGQZGQReentrantLock implements Serializable {
+//	static final class Segment<K, V> extends ZGQReentrantLock implements Serializable {
 //		private static final long serialVersionUID = 2249069246763182397L;
 //		static final int MAX_SCAN_RETRIES = Runtime.getRuntime().availableProcessors() > 1 ? 64 : 1;
 //		/**---ZGQ---
@@ -361,7 +362,7 @@
 //			for (int i = 0; i < oldCapacity; i++) {
 //				HashEntry<K, V> e = oldTable[i];
 //				if (e != null) {
-//					//(ZGQ) 先保存头节点的下一个节点
+//					//(ZGQ) 先将头节点的下一个节点保存起来
 //					HashEntry<K, V> next = e.next;
 //					//(ZGQ) 计数第一个节点要保存到新数组的哪个下标
 //					int idx = e.hash & sizeMask;
