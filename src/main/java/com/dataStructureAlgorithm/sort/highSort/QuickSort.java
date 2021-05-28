@@ -32,7 +32,6 @@ public class QuickSort {
 		if (low < high) {
 			//分区操作，将一个数组分成两个分区，返回分区界限索引
 			//partition(arr, 0, 7);
-
 			int index = partition(arr, low, high);
 			//对左分区进行快排
 			quickSort(arr, low, index - 1);
@@ -41,6 +40,7 @@ public class QuickSort {
 		}
 	}
 
+	//arr = {6, 4, 5, 7, 1, 3, 2, 8}      0        7
 	private int partition(int[] arr, int low, int high) {
 		//指定左指针i和右指针j
 		int left = low;//指向左子组数组的第一个元素
@@ -64,7 +64,7 @@ public class QuickSort {
 			while (arr[left] < x && left < right) {
 				left++;
 			}
-			//4.将左侧找到的打印等于基准值的值加入到右边的坑中，右指针向中间移动一个位置 right--
+			//4.将左侧找到的大于基准值的值加入到右边的坑中，右指针向中间移动一个位置 right--
 			if (left < right) {
 				arr[right] = arr[left];
 				right--;

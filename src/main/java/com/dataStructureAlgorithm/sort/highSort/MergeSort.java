@@ -71,8 +71,7 @@ public class MergeSort {
 				tmp[i] = a[p1];
 				i = i + 1;
 				p1 = p1 + 1;
-			}
-			else {
+			} else {
 				tmp[i] = a[p2];
 				i = i + 1;
 				p2 = p2 + 1;
