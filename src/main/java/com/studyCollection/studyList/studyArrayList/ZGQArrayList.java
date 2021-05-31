@@ -1,7 +1,6 @@
 package com.studyCollection.studyList.studyArrayList;
 
 import java.util.Arrays;
-import java.util.List;
 
 public class ZGQArrayList<E> {
 

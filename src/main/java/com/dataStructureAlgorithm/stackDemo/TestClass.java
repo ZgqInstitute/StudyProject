@@ -6,14 +6,14 @@ public class TestClass {
 
     @Test
     public void test(){
-        Stack<Integer> integerStack = new Stack<>();
-        integerStack.push(1);
-        integerStack.push(2);
-        integerStack.push(3);
+        ZGQStack<Integer> integerZGQStack = new ZGQStack<>();
+        integerZGQStack.push(1);
+        integerZGQStack.push(2);
+        integerZGQStack.push(3);
 
-        System.out.println(integerStack.pop() + "----" + integerStack.size());
-        System.out.println(integerStack.pop() + "----" + integerStack.size());
-        System.out.println(integerStack.pop() + "----" + integerStack.size());
+        System.out.println(integerZGQStack.pop() + "----" + integerZGQStack.size());
+        System.out.println(integerZGQStack.pop() + "----" + integerZGQStack.size());
+        System.out.println(integerZGQStack.pop() + "----" + integerZGQStack.size());
 
     }
 }
