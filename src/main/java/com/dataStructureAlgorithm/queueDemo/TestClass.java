@@ -6,15 +6,18 @@ public class TestClass {
 
     @Test
     public void test(){
-        QueueTest<String> queueTest = new QueueTest<>();
-        queueTest.push("a");
-        queueTest.push("b");
-        queueTest.push("c");
-        queueTest.push("d");
+        System.out.println(isUnique("abc"));
+    }
 
-        System.out.println(queueTest.pop());
-        System.out.println(queueTest.pop());
-        System.out.println(queueTest.pop());
-        System.out.println(queueTest.pop());
+    public boolean isUnique(String astr) {
+        char[] c = astr.toCharArray();
+        for(int i = 0; i < c.length; i++){
+            for(int j = i+1; j < c.length - i; j++){
+                if(c[j] == c[i]){
+                    return false;
+                }
+            }
+        }
+        return true;
     }
 }
