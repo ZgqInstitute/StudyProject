@@ -3,6 +3,7 @@ package com.studyJava8;
 public class Person {
 	private String name;
 
+	//构造方法
 	public Person(){}
 
 	public Person(String name){
