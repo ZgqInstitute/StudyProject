@@ -14,6 +14,13 @@ import java.util.Optional;
  */
 public class OptionalTest {
 
+    @Test
+    public void testOf1() {
+        Optional<Student> s = Optional.of(new Student("aa", 12));
+        Student student = s.get();
+        System.out.println(student);
+    }
+
     /**
      * of()方法是创建一个Optional容器实例，不能构建空的Optional
      * 注：of()方法的参数若为null，将报空指针，也就是说不能通过of()方法来创建空的Optional实例，
