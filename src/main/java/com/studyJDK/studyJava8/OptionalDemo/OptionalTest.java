@@ -2,10 +2,8 @@ package com.studyJDK.studyJava8.OptionalDemo;
 
 import org.junit.Test;
 
-import java.util.ArrayList;
-import java.util.List;
-import java.util.ListIterator;
-import java.util.Optional;
+import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @auther: guangquan_zhu
@@ -135,9 +133,9 @@ public class OptionalTest {
 
         System.out.println("xxx");
 
-        for(ListIterator<Student> it = studentList.listIterator(); it.hasNext();){
+        for (ListIterator<Student> it = studentList.listIterator(); it.hasNext(); ) {
             Student next = it.next();
-            if(next.getAge()==9){
+            if (next.getAge() == 9) {
                 next.setAge(1);
 
                 Student s = new Student();
@@ -151,5 +149,15 @@ public class OptionalTest {
         System.out.println("zz");
 
     }
+
+    @Test
+    public void ttt() {
+        new Activity(1,"篮球",true);
+
+
+
+
+    }
+
 
 }

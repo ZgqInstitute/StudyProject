@@ -1,4 +1,4 @@
-package com.studyCollection.studyList.studyLinkedList;
+package com.studyCollection.studyList.sourceCodeLinkedList;
 
 
 

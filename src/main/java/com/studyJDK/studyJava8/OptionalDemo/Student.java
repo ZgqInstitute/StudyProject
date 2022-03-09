@@ -1,5 +1,7 @@
 package com.studyJDK.studyJava8.OptionalDemo;
 
+import java.util.List;
+
 /**
  * @auther: guangquan_zhu
  * @Date: 2021-1-1
@@ -8,6 +10,8 @@ package com.studyJDK.studyJava8.OptionalDemo;
 public class Student {
     private String name;
     private int age;
+    private List<Activity> activityList;
+
     public Student(){}
     public Student(String name, int age){
         this.name = name;
@@ -30,12 +34,11 @@ public class Student {
         this.age = age;
     }
 
-    @Override
-    public String toString() {
-        return "Student{" +
-                "name='" + name + '\'' +
-                ", age=" + age +
-                '}';
+    public List<Activity> getActivityList() {
+        return activityList;
     }
 
+    public void setActivityList(List<Activity> activityList) {
+        this.activityList = activityList;
+    }
 }

@@ -1,4 +1,4 @@
-package com.studyCollection.studyList.studyArrayList;
+package com.studyCollection.studyList.sourceCodeArrayList;
 
 import java.util.Arrays;
 
