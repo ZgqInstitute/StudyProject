@@ -1,7 +1,8 @@
-package com.studyDesignPattern.strategyDemo;
+package com.studyDesignPattern.strategyDemo.demo02;
+
 
 /**
- * 僵尸抽象类
+ * 僵尸抽象类（定义策略）
  */
 public abstract class Zombie {
 

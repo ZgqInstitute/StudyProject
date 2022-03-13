@@ -1,4 +1,4 @@
-package com.studyDesignPattern.strategyDemo;
+package com.studyDesignPattern.strategyDemo.demo02;
 
 import org.junit.Test;
 

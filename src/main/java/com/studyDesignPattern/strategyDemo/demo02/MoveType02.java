@@ -1,4 +1,5 @@
-package com.studyDesignPattern.strategyDemo;
+package com.studyDesignPattern.strategyDemo.demo02;
+
 
 /**
  * 僵尸的移动方式2
