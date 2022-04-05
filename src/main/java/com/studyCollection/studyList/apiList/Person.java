@@ -35,6 +35,18 @@ public class Person {
         this.address = address;
     }
 
+    @Override
+    public String toString() {
+        return "Person{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", sex='" + sex + '\'' +
+                ", address='" + address + '\'' +
+                ", height=" + height +
+                ", birth=" + birth +
+                '}';
+    }
+
     public String getName() {
         return name;
     }
