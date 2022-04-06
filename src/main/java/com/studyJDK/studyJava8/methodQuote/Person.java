@@ -21,13 +21,14 @@ public class Person {
         return "nba";
     }
 
-    public static String method02(String s) {
+    public Worker method02() {
+        return new Worker();
+    }
+
+    public static String method03(String s) {
         String s1 = s + "nba";
         return s1;
     }
-
-
-
 
 
     public Integer getAge() {
