@@ -4,6 +4,7 @@ import org.junit.Test;
 
 import java.time.LocalDateTime;
 import java.util.*;
+import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
@@ -13,8 +14,22 @@ import java.util.stream.Collectors;
  */
 public class ListApiTest {
 
+    @Test
+    public void ss(){
+        Person person1 = new Person("a1", 12, "w", "北京");
+        Person person2 = new Person("a2", 33, "w", "上海");
+        List<Person> list1 = new ArrayList<>(Collections.singletonList(person1));
+        list1.add(person2);
+
+        List<Person> list2 = Collections.singletonList(person1);
+        list2.add(person2);
+
+        System.out.println(list2);
+    }
+
+
     /**
-     * 需求：性别 + 地址作为key，性别+地址相同的放在同一个集合
+     * List转Map
      */
     @Test
     public void ListToMapTest(){
@@ -22,28 +37,75 @@ public class ListApiTest {
         Person person2 = new Person("a2", 33, "w", "上海");
         Person person3 = new Person("a3", 5, "m", "北京");
         Person person4 = new Person("a4", 16, "w", "上海");
-        Person person5 = new Person("a5", 95, "m", "北京");
+        Person person5 = new Person("a5", 12, "w", "北京");
         Person person6 = new Person("a6", 24, "w", "杭州");
-        Person person7 = new Person("a7", 18, "m", "北京");
-        Person person8 = new Person("a8", 143, "w", "上海");
-        Person person9 = new Person("a9", 18, "m", "北京");
 
-        List<Person> list = Arrays.asList(person1, person2, person3, person4, person5, person6, person7, person8, person9);
 
-        // 方法1
-        Map<String, List<Person>> map1 = list.stream().collect(Collectors.groupingBy(x -> x.getSex() + x.getAddress(), Collectors.toList()));
+        List<Person> list = Arrays.asList(person1, person2, person3, person4, person5, person6);
 
-        // 方法2
-        Map<String, List<Person>> map2 = list.stream().collect(Collectors.toMap(
-                x -> x.getSex() + x.getAddress(),
+        /**
+         * 使用Collectors.groupingBy实现
+         *
+         */
+        Map<Integer, List<Person>> groupingBy01 = list.stream().collect(Collectors.groupingBy(x -> x.getAge(), Collectors.toList()));
+        Map<Integer, List<Person>> groupingBy02 = list.stream().collect(Collectors.groupingBy(Person::getAge, Collectors.toList()));
+
+        /**
+         * Collectors.toMap方法三种实现
+         * 实现一：
+         *        toMap(Function<? super T, ? extends K> keyMapper,
+         *                  Function<? super T, ? extends U> valueMapper)
+         * 说明：
+         *       使用这种实现方式key不能重复，一旦key重复将报java.lang.IllegalStateException: Duplicate key异常
+         */
+        Map<String, Person> toMap01 = list.stream().collect(Collectors.toMap(
+                Person::getName,
+                x -> x
+//                Function.identity()  注：这种方式也是返回本身，逼格比x -> x要高
+        ));
+
+        /**
+         * Collectors.toMap方法三种实现
+         * 实现二：toMap(Function<? super T, ? extends K> keyMapper,
+         *                                     Function<? super T, ? extends U> valueMapper,
+         *                                     BinaryOperator<U> mergeFunction)
+         * 说明：
+         *      使用这种方式允许key重复，当key重复时将使用参数三的处理方式
+         */
+        Map<Integer, Person> toMap02_1 = list.stream().collect(Collectors.toMap(
+                Person::getAge,
+                Function.identity(),
+                // 当key重复时，直接使用原来key对应的value。x和y对应的都是value值
+                (x, y) -> x
+        ));
+        Map<String, List<Person>> toMap02_2 = list.stream().collect(Collectors.toMap(
+                x -> x.getAge() + x.getSex(),
+                // 因为ArrayList只有构造函数ArrayList(Collection<? extends E> c)，没有ArrayList(Person)构造
                 a -> new ArrayList<>(Collections.singletonList(a)),
+                // 当key重复时，value为所有相同key对应value的和。a1和a2对应的都是value值
                 (a1, a2) -> {
                     a1.addAll(a2);
                     return a1;
                 }
         ));
 
-        System.out.println();
+        /**
+         * Collectors.toMap方法三种实现
+         * 实现三：toMap(Function<? super T, ? extends K> keyMapper,
+         *                                 Function<? super T, ? extends U> valueMapper,
+         *                                 BinaryOperator<U> mergeFunction,
+         *                                 Supplier<M> mapSupplier)
+         * 说明：
+         *     当我们想要返回LinkedHashMap时，就使用带四个参数的toMap
+         */
+        LinkedHashMap<Integer, Person> toMap03 = list.stream().collect(Collectors.toMap(
+                Person::getAge,
+                Function.identity(),
+                // 当key重复时，直接使用原来key对应的value。x和y对应的都是value值
+                (x, y) -> x,
+                LinkedHashMap::new
+        ));
+
     }
 
     /**
