@@ -14,20 +14,6 @@ import java.util.stream.Collectors;
  */
 public class ListApiTest {
 
-    @Test
-    public void ss(){
-        Person person1 = new Person("a1", 12, "w", "北京");
-        Person person2 = new Person("a2", 33, "w", "上海");
-        List<Person> list1 = new ArrayList<>(Collections.singletonList(person1));
-        list1.add(person2);
-
-        List<Person> list2 = Collections.singletonList(person1);
-        list2.add(person2);
-
-        System.out.println(list2);
-    }
-
-
     /**
      * List转Map
      */
