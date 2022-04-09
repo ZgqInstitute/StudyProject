@@ -1,4 +1,4 @@
-package com.studyReflect.entity;
+package com.studyJAVABase.reflect;
 
 public class Home {
 	private String address;
