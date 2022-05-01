@@ -12,27 +12,30 @@ public class Person {
     private String name;
     private Integer age;
     private String sex;
-    private String address;
     private Integer height;
     private LocalDateTime birth;
 
     public Person() {
     }
 
-    public Person(String name, Integer age, String sex, String address, Integer height, LocalDateTime birth) {
-        this.name = name;
+    public Person(Integer age, Integer height, LocalDateTime birth) {
         this.age = age;
-        this.sex = sex;
-        this.address = address;
         this.height = height;
         this.birth = birth;
     }
 
-    public Person(String name, Integer age, String sex, String address) {
+    public Person(String name, Integer age, String sex, Integer height, LocalDateTime birth) {
         this.name = name;
         this.age = age;
         this.sex = sex;
-        this.address = address;
+        this.height = height;
+        this.birth = birth;
+    }
+
+    public Person(String name, Integer age, String sex) {
+        this.name = name;
+        this.age = age;
+        this.sex = sex;
     }
 
     @Override
@@ -41,7 +44,6 @@ public class Person {
                 "name='" + name + '\'' +
                 ", age=" + age +
                 ", sex='" + sex + '\'' +
-                ", address='" + address + '\'' +
                 ", height=" + height +
                 ", birth=" + birth +
                 '}';
@@ -71,13 +73,6 @@ public class Person {
         this.sex = sex;
     }
 
-    public String getAddress() {
-        return address;
-    }
-
-    public void setAddress(String address) {
-        this.address = address;
-    }
 
     public Integer getHeight() {
         return height;

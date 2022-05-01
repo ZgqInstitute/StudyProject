@@ -11,6 +11,7 @@ public class Student {
     private String name;
     private int age;
     private List<Activity> activityList;
+    private Boolean man;
 
     public Student(){}
     public Student(String name, int age){
@@ -40,5 +41,13 @@ public class Student {
 
     public void setActivityList(List<Activity> activityList) {
         this.activityList = activityList;
+    }
+
+    public Boolean getMan() {
+        return man;
+    }
+
+    public void setMan(Boolean man) {
+        this.man = man;
     }
 }
