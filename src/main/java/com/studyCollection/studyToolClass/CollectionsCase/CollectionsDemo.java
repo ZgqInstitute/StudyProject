@@ -30,6 +30,10 @@ public class CollectionsDemo {
     public void emptyList_test(){
         String str = "";
         List<String> list = getList(str);
+
+        // 若list返回Collections.emptyList()再调用add方法将抛UnsupportedOperationException异常
+        list.add("aaa");
+
         System.out.println(list.size());
     }
 
