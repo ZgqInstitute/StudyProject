@@ -1,4 +1,4 @@
-package com.studyCollection.studyToolClass;
+package com.studyCollection.studyToolClass.CollectorsCase;
 
 import java.time.LocalDateTime;
 
