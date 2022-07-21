@@ -32,7 +32,7 @@ public class QuickSort {
 			while (arr[i] <= base && i < j){
 				i++;
 			}
-			//执行到这说明左面已经找到已经基准数小的数；右边找到了比基准数小的数；再交换
+			//执行到这说明左面已经找到比基准数大的数；右边找到了比基准数小的数；再交换
 			int temp = arr[i];
 			arr[i] = arr[j];
 			arr[j] = temp;
