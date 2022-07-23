@@ -7,12 +7,13 @@ import java.util.Arrays;
 /**
  * 希尔排序
  *      希尔排序是插入排序的改进，也称为缩小增量排序。
+ *      排序思路参考：https://www.bilibili.com/video/BV1n4411U7BD?p=64&vd_source=6236cc1d207e07a0bad6978dc5f9d845
  */
 public class ShellSort {
 
 	@Test
 	public void test() {
-		int[] a = {8, 9, 1, 7, 2, 3, 5, 4, 6, 0};//{3, 5, 1, 6, 0, 8, 9, 4, 7, 2} —> {0, 2, 1, 4, 3, 5, 7, 6, 9, 8}
+		int[] a = {8, 9, 1, 7, 2, 3, 5, 4, 6, 0};
 		sort(a);
 	}
 
