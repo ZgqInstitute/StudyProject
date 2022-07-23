@@ -17,7 +17,7 @@ public class ShellSort {
 	}
 
 	public void sort(int[] array) {
-		//控制分组的个数
+		//控制分组的个数。每组采用插入排序的方式进行排序。直到len=1最后一组，就是插入排序
 		for (int len = array.length / 2; len > 0; len = len / 2) {
 
 			for (int i = len; i < array.length; i++) {
