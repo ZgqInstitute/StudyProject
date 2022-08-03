@@ -82,7 +82,7 @@ public class BinaryTree {
     /**
      * 前序遍历
      */
-    public int preOrder(Node node) {
+    public void preOrder(Node node) {
 
         System.out.print(node.data + ", ");
 
@@ -92,7 +92,6 @@ public class BinaryTree {
         if (node.right != null) {
             preOrder(node.right);
         }
-        return -1;
     }
 
     /**
