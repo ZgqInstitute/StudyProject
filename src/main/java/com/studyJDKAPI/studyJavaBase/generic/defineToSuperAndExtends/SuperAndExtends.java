@@ -1,4 +1,4 @@
-package com.studyJAVABase.generic.defineToSuperAndExtends;
+package com.studyJDKAPI.studyJavaBase.generic.defineToSuperAndExtends;
 
 /**
  * 泛型方法在使用上下边界限定注意事项

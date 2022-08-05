@@ -1,4 +1,4 @@
-package com.studyJAVABase.generic.defineToMethod;
+package com.studyJDKAPI.studyJavaBase.generic.defineToMethod;
 
 import org.junit.Test;
 

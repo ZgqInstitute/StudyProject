@@ -1,4 +1,4 @@
-package com.studyJDK.studyJava8.methodQuote;
+package com.studyJDKAPI.studyJava8.methodQuote;
 
 /**
  * @auther: guangquan_zhu

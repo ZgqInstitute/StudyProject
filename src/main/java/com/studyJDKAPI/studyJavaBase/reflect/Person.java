@@ -1,11 +1,12 @@
-package com.studyJAVABase.reflect;
+package com.studyJDKAPI.studyJavaBase.reflect;
+
 
 
 public class Person {
 
 	private String name;
 	private int age;
-	private Home home;
+
 
 	public Person() {
 
@@ -16,10 +17,6 @@ public class Person {
 		this.age = age;
 	}
 
-	public Person(String name, Home home) {
-		this.name = name;
-		this.home = home;
-	}
 
 	public void method01() {
 		System.out.println("method01方法");
@@ -50,20 +47,11 @@ public class Person {
 		this.age = age;
 	}
 
-	public Home getHome() {
-		return home;
-	}
-
-	public void setHome(Home home) {
-		this.home = home;
-	}
-
 	@Override
 	public String toString() {
-		return "Country{" +
+		return "Person{" +
 				"name='" + name + '\'' +
 				", age=" + age +
-				", home=" + home +
 				'}';
 	}
 }

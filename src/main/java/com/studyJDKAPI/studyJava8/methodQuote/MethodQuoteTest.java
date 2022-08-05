@@ -1,4 +1,4 @@
-package com.studyJDK.studyJava8.methodQuote;
+package com.studyJDKAPI.studyJava8.methodQuote;
 
 import org.junit.Test;
 import java.util.function.Function;

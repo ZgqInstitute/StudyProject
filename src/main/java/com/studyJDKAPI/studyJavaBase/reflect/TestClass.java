@@ -1,4 +1,4 @@
-package com.studyJAVABase.reflect;
+package com.studyJDKAPI.studyJavaBase.reflect;
 
 import org.junit.Test;
 
@@ -10,7 +10,7 @@ public class TestClass {
 
 	@Test
 	public void testMethod() throws Exception {
-		Class personClass = Class.forName("com.studyJAVABase.reflect.Person");
+		Class personClass = Class.forName("com.studyJDKAPI.studyJavaBase.reflect.Person");
 		Constructor constructor = personClass.getConstructor();
 		Person o = (Person)constructor.newInstance();
 		Method method01 = personClass.getMethod("method02", String.class, String.class);

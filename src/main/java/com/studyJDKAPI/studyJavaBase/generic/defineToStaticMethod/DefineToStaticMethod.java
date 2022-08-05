@@ -1,4 +1,4 @@
-package com.studyJAVABase.generic.defineToStaticMethod;
+package com.studyJDKAPI.studyJavaBase.generic.defineToStaticMethod;
 
 /**
  * 静态方法使用泛型

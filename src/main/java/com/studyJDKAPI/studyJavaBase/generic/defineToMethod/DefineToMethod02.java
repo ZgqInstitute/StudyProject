@@ -1,4 +1,4 @@
-package com.studyJAVABase.generic.defineToMethod;
+package com.studyJDKAPI.studyJavaBase.generic.defineToMethod;
 
 /**
  * 方法参数上的泛型由方法前面的泛型来控制

@@ -1,4 +1,4 @@
-package com.studyJAVABase.generic.defineToSuperAndExtends;
+package com.studyJDKAPI.studyJavaBase.generic.defineToSuperAndExtends;
 
 public class Generic<T extends Number> {
     private T aa;

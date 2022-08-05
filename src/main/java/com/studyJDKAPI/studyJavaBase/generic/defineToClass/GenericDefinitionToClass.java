@@ -1,4 +1,4 @@
-package com.studyJAVABase.generic.defineToClass;
+package com.studyJDKAPI.studyJavaBase.generic.defineToClass;
 
 /**
  * 泛型定义在类上

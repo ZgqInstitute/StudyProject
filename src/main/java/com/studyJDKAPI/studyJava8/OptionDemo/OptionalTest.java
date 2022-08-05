@@ -1,9 +1,8 @@
-package com.studyJDK.studyJava8.OptionalDemo;
+package com.studyJDKAPI.studyJava8.OptionDemo;
 
 import org.junit.Test;
 
 import java.util.*;
-import java.util.stream.Collectors;
 
 /**
  * @auther: guangquan_zhu
