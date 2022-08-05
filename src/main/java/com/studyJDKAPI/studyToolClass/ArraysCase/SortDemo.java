@@ -1,7 +1,6 @@
 package com.studyJDKAPI.studyToolClass.ArraysCase;
 
 import org.junit.Test;
-import org.springframework.stereotype.Component;
 
 import java.util.Arrays;
 import java.util.Comparator;
