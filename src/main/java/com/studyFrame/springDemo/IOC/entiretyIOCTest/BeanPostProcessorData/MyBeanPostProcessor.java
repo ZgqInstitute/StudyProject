@@ -1,8 +1,7 @@
-package com.studyFrame.springDemo.IOC.entiretyIOCTest;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest.BeanPostProcessorData;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.config.BeanPostProcessor;
-import org.springframework.context.annotation.Bean;
 
 public class MyBeanPostProcessor implements BeanPostProcessor {
 	@Override

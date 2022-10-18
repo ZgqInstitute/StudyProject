@@ -36,11 +36,11 @@ public class MyJavaBean implements InitializingBean {
 		return desc;
 	}
 
-//	public void setDesc(String desc) {
-//		System.out.println("调用setDesc()方法：" + getDesc());
-//		this.desc = desc;
-//		System.out.println("调用setDesc()方法：" + getDesc());
-//	}
+	public void setDesc(String desc) {
+		System.out.println("调用setDesc()方法：" + getDesc());
+		this.desc = desc;
+		System.out.println("调用setDesc()方法：" + getDesc());
+	}
 
 	public String getRemark() {
 		return remark;

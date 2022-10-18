@@ -1,6 +1,12 @@
 package com.studyFrame.networkIO.nettyDemo;
 
+import io.netty.bootstrap.ServerBootstrap;
+import io.netty.channel.Channel;
+import io.netty.channel.ChannelInitializer;
+import io.netty.channel.ChannelOption;
 import io.netty.channel.nio.NioEventLoopGroup;
+import io.netty.channel.socket.SocketChannel;
+import io.netty.channel.socket.nio.NioServerSocketChannel;
 
 import java.io.IOException;
 import java.util.concurrent.TimeUnit;
@@ -40,6 +46,22 @@ public class NettyServer {
         group.next().scheduleAtFixedRate(() -> {
             System.out.println("祝光泉");
         }, 2, 10, TimeUnit.SECONDS);
+
+        NioEventLoopGroup boss = new NioEventLoopGroup();
+        NioEventLoopGroup worker = new NioEventLoopGroup();
+
+        ServerBootstrap serverBootstrap = new ServerBootstrap();
+        serverBootstrap.group(boss, worker)
+                .channel(NioServerSocketChannel.class)
+                .option(ChannelOption.SO_BACKLOG, 128)
+                .childHandler(new ChannelInitializer<SocketChannel>() {
+                    @Override
+                    protected void initChannel(SocketChannel ch) throws Exception {
+                        ch.pipeline().addLast(null);
+                    }
+                }
+        );
+
 
     }
 }

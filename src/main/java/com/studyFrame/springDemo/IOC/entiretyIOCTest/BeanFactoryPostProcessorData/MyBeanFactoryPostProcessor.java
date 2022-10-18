@@ -1,4 +1,4 @@
-package com.studyFrame.springDemo.IOC.entiretyIOCTest;
+package com.studyFrame.springDemo.IOC.entiretyIOCTest.BeanFactoryPostProcessorData;
 
 import org.springframework.beans.BeansException;
 import org.springframework.beans.MutablePropertyValues;
@@ -18,16 +18,16 @@ public class MyBeanFactoryPostProcessor implements BeanFactoryPostProcessor {
 
 		System.out.println();
 
-		System.out.println("通过BeanFactoryPostProcessor方式修改desc属性&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
+		System.out.println("通过BeanFactoryPostProcessor方式修改desc属性////////");
 		bd.getPropertyValues().add("desc","7777");
 
-//		if (pv.contains("remark")) {
-//			System.out.println("通过BeanFactoryPostProcessor方式修改remark属性&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-//			pv.addPropertyValue("remark", "在BeanFactoryPostProcessor中修改之后的《备注》信息");
-//		}
-//		if (pv.contains("desc")) {
-//			System.out.println("通过BeanFactoryPostProcessor方式修改desc属性&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&&");
-//			pv.addPropertyValue("desc", "在BeanFactoryPostProcessor中修改之后的《描述》信息");
-//		}
+		if (pv.contains("remark")) {
+			System.out.println("通过BeanFactoryPostProcessor方式修改remark属性#####");
+			pv.addPropertyValue("remark", "在BeanFactoryPostProcessor中修改之后的《备注》信息");
+		}
+		if (pv.contains("desc")) {
+			System.out.println("通过BeanFactoryPostProcessor方式修改desc属性[[[[[[[[");
+			pv.addPropertyValue("desc", "在BeanFactoryPostProcessor中修改之后的《描述》信息");
+		}
 	}
 }
