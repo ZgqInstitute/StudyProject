@@ -48,7 +48,7 @@ public class DateTimeFormatterDemo {
         System.out.println("parse = " + parse3);
 
         /**
-         * LocalDate转字符串
+         * LocalTime转字符串
          */
         DateTimeFormatter formatter4 = DateTimeFormatter.ofPattern("HH:mm:ss");
         LocalTime localTime = LocalTime.now();
@@ -56,7 +56,7 @@ public class DateTimeFormatterDemo {
         System.out.println("time = " + time4);
 
         /**
-         * String转LocalDate
+         * String转LocalTime
          */
         String stringTime5 = "10:11:12";
         DateTimeFormatter formatter5 = DateTimeFormatter.ofPattern("HH:mm:ss");
