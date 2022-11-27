@@ -7,6 +7,9 @@ import java.util.Comparator;
 
 public class SortDemo {
 
+    /**
+     * sort(T[] a, Comparator<? super T> c)使用案例
+     */
     @Test
     public void sortTest() {
         Student s1 = new Student(18);
