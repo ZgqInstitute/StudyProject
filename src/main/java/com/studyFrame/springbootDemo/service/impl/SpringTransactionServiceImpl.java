@@ -14,6 +14,10 @@ public class SpringTransactionServiceImpl implements SpringTransactionService {
     @Resource
     private SpringTransactionMapper springTransactionMapper;
 
+    /**
+     * @Transactional可以放在哪些位置：1）service实现类的方法上；2）service实现类上；3）service接口的方法上；4）service接口上；
+     * 四个位置按照上面1、2、3、4的顺序进行解析
+     */
     @Transactional
     public boolean transfer(int inUserId, int outUserId, int account) {
         // 校验转出用户的金额是否足够
