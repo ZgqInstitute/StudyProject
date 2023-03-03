@@ -23,4 +23,15 @@ public class HashMapDemo {
         String value2 = sites.getOrDefault(4, "默认值");
         System.out.println("Value for key 4: " + value2);
     }
+
+    @Test
+    public void containsKeyTest() {
+        HashMap<Integer, String> map = new HashMap<>();
+        map.put(1, "Google");
+        map.put(2, "Runoob");
+        map.put(3, "Taobao");
+
+        System.out.println(map.containsKey(1));
+        System.out.println(map.containsKey(4));
+    }
 }
