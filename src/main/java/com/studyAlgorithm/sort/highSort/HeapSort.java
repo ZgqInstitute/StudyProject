@@ -13,7 +13,7 @@ public class HeapSort {
 
     @Test
     public void sort() {
-        int[] a = {8, 9, 1, 7, 2, 3, 5, 4, 6, 0};
+        int[] a = {4, 2, 1, 7, 0, 3, 5, 8, 6, 9};
         System.out.println("排序前：" + Arrays.toString(a));
         heapSort(a);
         System.out.println("排序后：" + Arrays.toString(a));
