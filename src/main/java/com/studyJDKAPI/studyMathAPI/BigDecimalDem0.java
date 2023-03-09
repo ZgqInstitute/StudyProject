@@ -31,10 +31,22 @@ public class BigDecimalDem0 {
          * BigDecimal有下面2个构造函数，推荐使用BigDecimal(String val)
          * BigDecimal(String val)
          * BigDecimal(double val)
+         * 应该避免使用double构造BigDecimal，因为：有些数字用double根本无法精确表示，传给BigDecimal构造方法时就已经不精确了。
+         * 案例： new BigDecimal(0.1)得到的值是0.1000000000000000055511151231257827021181583404541015625。
+         * *     使用new BigDecimal("0.1")得到的值是0.1。因此，如果需要精确计算，用String构造BigDecimal，避免用double构造，尽管它看起来更简单！
          */
         BigDecimal b1 = new BigDecimal("0.05");
         BigDecimal b2 = new BigDecimal("0.01");
         System.out.println(b1.add(b2));
+
+        /**
+         * 比较BigDecimal数值大小使用compareTo()，不要使用equals()
+         */
+        BigDecimal b3 = new BigDecimal("0.1");
+        BigDecimal b4 = new BigDecimal("0.10");
+        System.out.println(b3.equals(b4));//false
+        System.out.println(b3.compareTo(b4));//0
+
 
 
     }
