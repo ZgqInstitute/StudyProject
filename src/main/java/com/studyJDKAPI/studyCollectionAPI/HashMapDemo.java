@@ -34,4 +34,46 @@ public class HashMapDemo {
         System.out.println(map.containsKey(1));
         System.out.println(map.containsKey(4));
     }
+
+    /**
+     * computeIfAbsent() 方法对 hashMap 中指定 key 的值进行重新计算，如果不存在这个 key，则添加到 hashMap 中。
+     * computeIfAbsent()的返回值：如果 key 对应的 value 不存在，则使用获取 remappingFunction 重新计算后的值，
+     *                            并保存为该 key 的 value，否则返回 value。
+     */
+    @Test
+    public void computeIfAbsentTest(){
+        /*
+         * 情况1：当使用computeIfAbsent()方法添加不存在的key
+         */
+        HashMap<String, Integer> prices = new HashMap<>();
+        prices.put("Shoes", 200);
+        prices.put("Bag", 300);
+        prices.put("Pant", 150);
+        System.out.println("HashMap: " + prices);//HashMap: {Pant=150, Bag=300, Shoes=200}
+
+        // 添加map中不存在的key
+        int shirtPrice = prices.computeIfAbsent("Shirt", key -> 280);//返回值就是value=280
+        System.out.println("Price of Shirt: " + shirtPrice);//Price of Shirt: 280
+
+        // 输出更新后的HashMap
+        System.out.println("Updated HashMap: " + prices);//Updated HashMap: {Pant=150, Shirt=280, Bag=300, Shoes=200}
+
+
+
+        /*
+         * 情况2：当使用computeIfAbsent()方法添加已经存在的key
+         */
+        HashMap<String, Integer> prices02 = new HashMap<>();
+        prices02.put("Shoes", 180);
+        prices02.put("Bag", 300);
+        prices02.put("Pant", 150);
+        System.out.println("HashMap: " + prices02);//HashMap: {Pant=150, Bag=300, Shoes=180}
+
+        // map中已经有Shoes的映射关系，并没有使用新值280
+        int shoePrice = prices02.computeIfAbsent("Shoes", (key) -> 280);
+        System.out.println("Price of Shoes: " + shoePrice);//Price of Shoes: 180
+
+        // 输出更新后的 HashMap
+        System.out.println("Updated HashMap: " + prices02);//Updated HashMap: {Pant=150, Bag=300, Shoes=180}
+    }
 }
