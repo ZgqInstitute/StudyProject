@@ -76,4 +76,33 @@ public class HashMapDemo {
         // 输出更新后的 HashMap
         System.out.println("Updated HashMap: " + prices02);//Updated HashMap: {Pant=150, Bag=300, Shoes=180}
     }
+
+    /**
+     * putIfAbsent()方法会先判断指定的键（key）是否存在，不存在则将键/值对插入到 HashMap 中。
+     * putIfAbsent()方法返回值：
+     *     如果所指定的 key 已经在 HashMap 中存在，返回和这个 key 值对应的 value；
+     *     如果所指定的 key 不在 HashMap 中存在，则返回 null；
+     *     注意：如果指定 key 之前已经和一个 null 值相关联了 ，则该方法也返回 null。
+     */
+    @Test
+    public void putIfAbsentTest(){
+        HashMap<String, Integer> prices = new HashMap<>();
+        prices.put("Shoes", 200);
+        prices.put("Bag", 300);
+        prices.put("Pant", 150);
+        System.out.println(prices);//{Pant=150, Bag=300, Shoes=200}
+
+        // put的key在map中不存在
+        Integer book = prices.putIfAbsent("book", 100);
+        System.out.println(book);//null
+        System.out.println(prices);//{Pant=150, book=100, Bag=300, Shoes=200}
+
+        // put的key在map中已经存在
+        Integer shoes = prices.putIfAbsent("Shoes", 110);
+        System.out.println(shoes);//200
+        System.out.println(prices);//{Pant=150, book=100, Bag=300, Shoes=200} shoes的value还是原来的200
+    }
+
+
+
 }
