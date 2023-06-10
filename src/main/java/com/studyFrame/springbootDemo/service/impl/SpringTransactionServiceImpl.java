@@ -32,6 +32,7 @@ public class SpringTransactionServiceImpl implements SpringTransactionService {
 
             /**
              * 该方法可以控制在事务提交前执行、还是事务提交后执行
+             * 说明：这个只能在事务中使用，要是没有事务，会抛异常
              */
             TransactionSynchronizationManager.registerSynchronization(
                     new TransactionSynchronizationAdapter() {
@@ -39,7 +40,6 @@ public class SpringTransactionServiceImpl implements SpringTransactionService {
                         @Override
                         public void afterCommit() {
                             System.out.println("afterCommit----事务执行结束了");
-                            throw new RuntimeException("异常漏。。。。。");
                         }
                     });
 
