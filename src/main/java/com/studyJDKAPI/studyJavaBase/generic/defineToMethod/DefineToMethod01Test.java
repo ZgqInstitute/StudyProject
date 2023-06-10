@@ -2,12 +2,7 @@ package com.studyJDKAPI.studyJavaBase.generic.defineToMethod;
 
 import org.junit.Test;
 
-/**
- * @auther: guangquan_zhu
- * @Date:
- * @Description:
- */
-public class DefineToMethodTest {
+public class DefineToMethod01Test {
 
     @Test
     public void method01Test(){
@@ -25,18 +20,20 @@ public class DefineToMethodTest {
         DefineToMethod01<String> defineToMethod03 = new DefineToMethod01<>();
         defineToMethod03.method01("aaa");
 //        defineToMethod03.method01(1);  这样写编译不通过
+
     }
 
     @Test
     public void method02Test(){
-        DefineToMethod02 defineToMethod02 = new DefineToMethod02();
-        defineToMethod02.method02("aaa");
-        defineToMethod02.method02(1);
-
-        String re = defineToMethod02.method03("刘秀");
-        System.out.println(re);
-
-
+        DefineToMethod01<String> method2 = DefineToMethod01.method2("祝彦伊");
+        String value = method2.getValue();
+        System.out.println(value);
     }
 
+    @Test
+    public void method03Test(){
+        DefineToMethod01<String> method3 = DefineToMethod01.method3("祝彦伊");
+        String value = method3.getValue();
+        System.out.println(value);
+    }
 }
