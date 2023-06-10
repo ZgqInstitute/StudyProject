@@ -16,12 +16,12 @@ public class SpringTransactionController {
     @Autowired
     private SpringTransactionService springTransactionService;
 
-    @GetMapping("/{inUserId}/{outUserId}/{id}")
-    public String getUserById(@PathVariable Integer inUserId, @PathVariable Integer outUserId, @PathVariable Integer id) {
+    @GetMapping("/{inUserId}/{outUserId}/{transferMoney}")
+    public String getUserById(@PathVariable Integer inUserId, @PathVariable Integer outUserId, @PathVariable Integer transferMoney) {
         try {
-            springTransactionService.transfer(inUserId, outUserId, id);
+            springTransactionService.transfer(inUserId, outUserId, transferMoney);
         } catch (Exception e) {
-            return "转账失败";
+            return e.getMessage();
         }
         return "转账成功";
     }

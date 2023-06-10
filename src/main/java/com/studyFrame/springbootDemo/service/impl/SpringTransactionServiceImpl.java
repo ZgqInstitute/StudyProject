@@ -5,6 +5,8 @@ import com.studyFrame.springbootDemo.domain.mapper.SpringTransactionMapper;
 import com.studyFrame.springbootDemo.service.SpringTransactionService;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
+import org.springframework.transaction.support.TransactionSynchronizationAdapter;
+import org.springframework.transaction.support.TransactionSynchronizationManager;
 
 import javax.annotation.Resource;
 
@@ -27,13 +29,27 @@ public class SpringTransactionServiceImpl implements SpringTransactionService {
         }
         try {
             springTransactionMapper.transferAccounts_sub(outUserId, account);
+
+            /**
+             * 该方法可以控制在事务提交前执行、还是事务提交后执行
+             */
+            TransactionSynchronizationManager.registerSynchronization(
+                    new TransactionSynchronizationAdapter() {
+                        // 事务提交后执行afterCommit方法
+                        @Override
+                        public void afterCommit() {
+                            System.out.println("afterCommit----事务执行结束了");
+                            throw new RuntimeException("异常漏。。。。。");
+                        }
+                    });
+
             // 人为制造异常
             if (account == 38) {
                 throw new RuntimeException("转账失败");
             }
             springTransactionMapper.transferAccounts_add(inUserId, account);
         } catch (Exception e) {
-            throw new RuntimeException("转账失败");
+            throw new RuntimeException("转账失败，异常了傻逼");
         }
         return true;
     }
