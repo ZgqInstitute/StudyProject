@@ -10,12 +10,12 @@ import java.util.stream.Collectors;
  * 测试Stream的各种collect操作
  */
 public class StreamCollectTest {
-    private Person person1 = new Person("a1", 12, "w", "北京");
-    private Person person2 = new Person("a2", 33, "w", "上海");
-    private Person person3 = new Person("a3", 5, "m", "北京");
+    private Person person1 = new Person("a1", 12, "w", "上饶");
+    private Person person2 = new Person("a2", 33, "w", "南昌");
+    private Person person3 = new Person("a1", 5, "m", "北京");
     private Person person4 = new Person("a4", 16, "w", "上海");
-    private Person person5 = new Person("a5", 12, "w", "北京");
-    private Person person6 = new Person("a6", 24, "w", "杭州");
+    private Person person5 = new Person("a1", 13, "w", "深圳");
+    private Person person6 = new Person("a2", 24, "w", "杭州");
     private List<Person> list = Arrays.asList(person1, person2, person3, person4, person5, person6);
 
 
@@ -32,7 +32,7 @@ public class StreamCollectTest {
 
 
     /**
-     * 使用Collectors的toMap方法将List转Map
+     * 使用Collectors.toMap()   将List转Map
      */
     @Test
     public void toMapDemo(){
@@ -44,11 +44,12 @@ public class StreamCollectTest {
          * 说明：
          *       使用这种实现方式key不能重复，一旦key重复将报java.lang.IllegalStateException: Duplicate key异常
          */
-        Map<String, Person> toMap01 = list.stream().collect(Collectors.toMap(
-                Person::getName,
-                x -> x
-//                Function.identity()  注：这种方式也是返回本身，逼格比x -> x要高
-        ));
+        Map<String, Person> toMap01 = list.stream()
+                .collect(Collectors.toMap(
+                    Person::getName,
+                    x -> x  // Function.identity()  注：这种方式也是返回本身，逼格比x -> x要高
+                )
+        );
 
         /**
          * Collectors.toMap方法有三种实现方式
@@ -67,6 +68,7 @@ public class StreamCollectTest {
         Map<String, List<Person>> toMap02_2 = list.stream().collect(Collectors.toMap(
                 x -> x.getAge() + x.getSex(),
                 // 因为ArrayList只有构造函数ArrayList(Collection<? extends E> c)，没有ArrayList(Person)构造
+                // a就是单个Person对象，List<Person> list = Collections.singletonList(a);
                 a -> new ArrayList<>(Collections.singletonList(a)),
                 // 当key重复时，value为所有相同key对应value的和。a1和a2对应的都是value值
                 (a1, a2) -> {
@@ -95,29 +97,45 @@ public class StreamCollectTest {
     }
 
     /**
-     * 使用Collectors的groupingBy方法将List转Map
+     * 使用Collectors.groupingBy()   将List转Map
      */
     @Test
     public void groupingByDemo(){
         /**
          * Collectors.groupingBy方法有三种实现方式
          * 方式一：
-         *
+         *    当key相同时，将相同key对应的value都放到一个集合中
          */
         Map<Integer, List<Person>> groupingBy01 = list.stream().collect(Collectors.groupingBy(x -> x.getAge()));
+
 
         /**
          * Collectors.groupingBy方法有三种实现方式
          * 方式二：
-         *
+         *    统计每个分组的count
          */
         Map<Integer, Long> groupingBy02 = list.stream().collect(Collectors.groupingBy(Person::getAge, Collectors.counting()));
+    }
 
-        /**
-         * Collectors.groupingBy方法有三种实现方式
-         * 方式三：
-         *
-         */
+
+    @Test
+    public void test_Collectors_collectingAndThen(){
+
+        List<Person> perList = list.stream()
+                .collect(
+                        // collectingAndThen()方法有2个参数：Collector<T,A,R> downstream, Function<R,RR> finisher
+                        Collectors.collectingAndThen(
+                                // collectingAndThen方法参数一：Collector<T,A,R> downstream
+                                // 参数1就是对集合的收集操作，根据需要，将集合返回相应的数据结构
+                                Collectors.toMap(
+                                        Person::getName,
+                                        Function.identity(),
+                                        (oldValue, newValue) -> newValue),
+                                // collectingAndThen方法参数二：Function<R,RR> finisher
+                                // 参数1的返回值就是参数2的入参
+                                map -> new ArrayList<>(map.values())
+                        )
+                );
 
     }
 
