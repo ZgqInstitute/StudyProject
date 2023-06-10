@@ -3,6 +3,7 @@ package com.studyJDKAPI.studyJava8.OptionDemo;
 import org.junit.Test;
 
 import java.util.*;
+import java.util.stream.Collectors;
 
 /**
  * @auther: guangquan_zhu
@@ -84,18 +85,59 @@ public class OptionalTest {
     }
 
     /**
+     * 调用Optional的map()方法，传单个对象
      * 当使用Optional.ofNullable()方式来创建Optional容器时，容器内可能有值，也可能没有值，
      * 可以使用map()方法：当Optional容器内有值，就将Optional容器内的值使用到map()方法中的函数，并返回Optional，Optional的泛型为map()方法内函数的返回值
      * 当Optional容器内没有值，就返回Optional.empty()；
      */
     @Test
-    public void testMap() {
+    public void testOptionalMap_object() {
         Optional<Student> s = Optional.ofNullable(new Student("p1", 10));
         Optional<String> name = s.map(x -> x.getName());
         if (name.isPresent()) {
             System.out.println(name.get());
         }
     }
+
+    /**
+     * 调用Optional的map()方法，传集合，并且集合不为null的情况
+     */
+    @Test
+    public void testOptionalMap_list_no_null(){
+        List<Student> stuList = new ArrayList<>();
+        stuList.add(new Student("aa",19));
+        stuList.add(new Student("bb",29));
+        stuList.add(new Student("cc",39));
+
+        List<Integer> lists = Optional.ofNullable(stuList)
+                .map(list ->
+                        list.stream()
+                                .peek(stu -> stu.setAge(stu.getAge() + 1))// 对年龄加1
+                                .map(Student::getAge)
+                                .collect(Collectors.toList())
+                ).orElse(Collections.emptyList());
+
+        System.out.println(lists);
+    }
+
+    /**
+     * 调用Optional的map()方法，传集合，并且集合为null的情况
+     */
+    @Test
+    public void testOptionalMap_list_is_null(){
+        List<Student> stuList = null;
+
+        List<String> lists = Optional.ofNullable(stuList)
+                .map(list ->
+                        list.stream()
+                                .peek(stu -> stu.setName(stu.getName() + "aaa"))
+                                .map(Student::getName)
+                                .collect(Collectors.toList())
+                ).orElse(Collections.emptyList());
+
+        System.out.println(lists);
+    }
+
 
     /**
      * 当使用Optional.ofNullable()方式来创建Optional容器时，容器内可能有值，也可能没有值，

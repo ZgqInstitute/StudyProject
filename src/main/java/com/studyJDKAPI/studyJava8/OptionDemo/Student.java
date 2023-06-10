@@ -51,4 +51,14 @@ public class Student {
     public void setMan(Boolean man) {
         this.man = man;
     }
+
+    @Override
+    public String toString() {
+        return "Student{" +
+                "name='" + name + '\'' +
+                ", age=" + age +
+                ", activityList=" + activityList +
+                ", man=" + man +
+                '}';
+    }
 }
