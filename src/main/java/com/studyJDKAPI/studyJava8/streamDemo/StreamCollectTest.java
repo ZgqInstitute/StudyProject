@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyToolClass.CollectorsCase;
+package com.studyJDKAPI.studyJava8.streamDemo;
 
 import org.junit.Test;
 
@@ -7,11 +7,9 @@ import java.util.function.Function;
 import java.util.stream.Collectors;
 
 /**
- * @auther: guangquan_zhu
- * @Date:
- * @Description:
+ * 测试Stream的各种collect操作
  */
-public class CollectorsDemo {
+public class StreamCollectTest {
     private Person person1 = new Person("a1", 12, "w", "北京");
     private Person person2 = new Person("a2", 33, "w", "上海");
     private Person person3 = new Person("a3", 5, "m", "北京");
@@ -19,6 +17,19 @@ public class CollectorsDemo {
     private Person person5 = new Person("a5", 12, "w", "北京");
     private Person person6 = new Person("a6", 24, "w", "杭州");
     private List<Person> list = Arrays.asList(person1, person2, person3, person4, person5, person6);
+
+
+    /**
+     * 测试Collectors.toList()
+     */
+    @Test
+    public void Test_Collectors_toList() {
+        List<Person> perlist = list.stream()
+                .peek(per -> per.setAge(per.getAge() + 2))
+                .collect(Collectors.toList());
+        System.out.println(perlist);//[Person(name=aa, age=12), Person(name=bb, age=22), Person(name=cc, age=32)]
+    }
+
 
     /**
      * 使用Collectors的toMap方法将List转Map
