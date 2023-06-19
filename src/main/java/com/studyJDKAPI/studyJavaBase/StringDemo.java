@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyString;
+package com.studyJDKAPI.studyJavaBase;
 
 import org.junit.Test;
 

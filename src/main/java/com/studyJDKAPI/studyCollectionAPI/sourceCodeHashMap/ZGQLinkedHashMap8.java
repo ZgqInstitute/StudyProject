@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyMap.studyHashMap;
+package com.studyJDKAPI.studyCollectionAPI.sourceCodeHashMap;
 
 
 public class ZGQLinkedHashMap8<K,V> extends ZGQHashMap8<K,V>{

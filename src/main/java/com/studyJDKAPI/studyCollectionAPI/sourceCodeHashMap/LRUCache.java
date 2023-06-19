@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyMap.studyHashMap;
+package com.studyJDKAPI.studyCollectionAPI.sourceCodeHashMap;
 
 
 import java.util.LinkedHashMap;

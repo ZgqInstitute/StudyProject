@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyMap.studyHashMap;
+package com.studyJDKAPI.studyCollectionAPI.sourceCodeHashMap;
 
 public class ZGQThreadLocalRandom {
 

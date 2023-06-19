@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyMathAPI;
+package com.studyJDKAPI.studyJavaBase.mathAPI;
 
 import org.junit.Test;
 
