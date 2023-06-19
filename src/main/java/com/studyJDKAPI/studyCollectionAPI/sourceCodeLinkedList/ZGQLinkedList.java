@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyList.sourceCodeLinkedList;
+package com.studyJDKAPI.studyCollectionAPI.sourceCodeLinkedList;
 
 
 

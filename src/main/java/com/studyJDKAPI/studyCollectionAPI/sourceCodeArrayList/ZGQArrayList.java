@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyList.sourceCodeArrayList;
+package com.studyJDKAPI.studyCollectionAPI.sourceCodeArrayList;
 
 import java.util.Arrays;
 

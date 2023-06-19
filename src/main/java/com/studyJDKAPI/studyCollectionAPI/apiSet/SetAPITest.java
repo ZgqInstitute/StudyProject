@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyList.apiSet;
+package com.studyJDKAPI.studyCollectionAPI.apiSet;
 
 
 /**

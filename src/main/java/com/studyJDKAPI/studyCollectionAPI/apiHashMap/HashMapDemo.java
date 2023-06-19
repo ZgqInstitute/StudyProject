@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyCollectionAPI;
+package com.studyJDKAPI.studyCollectionAPI.apiHashMap;
 
 import org.junit.Test;
 

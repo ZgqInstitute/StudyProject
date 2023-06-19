@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyList.apiList;
+package com.studyJDKAPI.studyCollectionAPI.apiList;
 
 import org.junit.Test;
 
