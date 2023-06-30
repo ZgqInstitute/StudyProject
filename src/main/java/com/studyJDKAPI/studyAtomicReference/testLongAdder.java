@@ -22,7 +22,7 @@ public class testLongAdder {
     }
 
     /**
-     * 测试各种原子类型实现i++的耗时，LongAdder和LongAccumulator完胜！！
+     * 测试各种原子类型实现i++的耗时，LongAdder和AtomicLong完胜！！
      *
      * 需求：50个线程，每个线程加 100 0000 次，测试不同方法的耗时
      */
