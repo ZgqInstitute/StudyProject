@@ -1,6 +1,5 @@
 package com.studyFrame.springbootDemo.config;
 
-import com.mysql.cj.jdbc.MysqlDataSource;
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
