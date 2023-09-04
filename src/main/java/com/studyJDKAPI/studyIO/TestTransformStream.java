@@ -37,9 +37,10 @@ public class TestTransformStream {
 
     /**
      * 使用OutputStreamWriter将字符流转为字节流
+     * 说明：OutputStreamWriter和FileWriter使用的都是默认编码表：GBK
      */
     @Test
-    public void test02() throws IOException{
+    public void test02_1() throws IOException{
         /**
          * 创建字节输出流。最终输出还是靠这个字节输出流，要使用这个字节输出流out，需要借助OutputStreamWriter将字符流转为字节流out
          * 这里只是为了学习标准输出流才用out，完全可以使用FileOutputStream
@@ -58,6 +59,36 @@ public class TestTransformStream {
          */
         bufferedWriter.write("宝宝伊伊");
         bufferedWriter.close();
+    }
+
+    /**
+     * 需求：使用转换流，指定写、读的编码
+     *
+     * OutputStreamWriter(OutputStream out, String charsetName)，指定写数据的字符集（编码表）
+     * InputStreamReader(InputStream in, String charsetName)，指定读数据的字符集（编码表）
+     * 若指定的字符集不存在，会抛UnsupportedEncodingException异常
+     */
+    @Test
+    public void test02_2() throws IOException{
+        /**
+         * 1- 利用OutputStreamWriter指定编码写数据到xiaorong.txt
+         */
+        FileOutputStream fileOutputStream = new FileOutputStream("xiaorong.txt");
+        // 指定UTF-8编码表
+        OutputStreamWriter outputStreamWriter = new OutputStreamWriter(fileOutputStream,"UTF-8");
+        outputStreamWriter.write("伊伊");
+        outputStreamWriter.close();
+
+        /**
+         * 2- 利用InputStreamReader指定编码读xiaorong.txt文件的数据
+         */
+        FileInputStream fileInputStream = new FileInputStream("xiaorong.txt");
+        // 这个指定的编码必须跟OutputStreamWriter指定的编码相同
+        InputStreamReader inputStreamReader = new InputStreamReader(fileInputStream,"UTF-8");
+        BufferedReader bufferedReader = new BufferedReader(inputStreamReader);
+        String s = bufferedReader.readLine();
+        System.out.println(s);
+        bufferedReader.close();
     }
 
 

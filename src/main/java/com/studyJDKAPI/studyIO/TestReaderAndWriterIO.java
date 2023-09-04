@@ -14,6 +14,11 @@ public class TestReaderAndWriterIO {
 
     /**
      * 需求：将内存中的数据输出到外围设备
+     *
+     * 注：FileWriter也是转换流，因为FileWriter extends OutputStreamWriter
+     *     FileWriter可以很方便的操作文本文件，但不能操作媒体文件。
+     *     FileWriter = 操作文件的字节流 + 本机默认的编码表
+     *     FileWriter不能指定编码表，若要指定编码表，就使用FileWriter的父类OutputStreamWriter
      */
     @Test
     public void test01() throws IOException {
@@ -76,7 +81,7 @@ public class TestReaderAndWriterIO {
      * 需求：从外围设备读一个字符数据到内存
      */
     @Test
-    public void test03() throws IOException {
+    public void test03_1() throws IOException {
         // 创建流对象
         FileReader fileReader = new FileReader("zgq.txt");
 
@@ -95,7 +100,7 @@ public class TestReaderAndWriterIO {
      * 需求：从外围设备文件的所有数据到内存
      */
     @Test
-    public void test04() throws IOException {
+    public void test03_2() throws IOException {
         FileReader fileReader = new FileReader("zgq.txt");
         int ch;
         while ((ch = fileReader.read()) != -1) {
@@ -114,7 +119,7 @@ public class TestReaderAndWriterIO {
      * 读第三次得到的数据：dec  因为前二次已经读完了，读第三次没有得到数据，数组还是读第二次的
      */
     @Test
-    public void test05() throws IOException {
+    public void test04_1() throws IOException {
         // 创建流对象
         FileReader fileReader = new FileReader("zgq.txt");
         // 先创建数组。数组的大小表示读文件前几个字符
@@ -127,10 +132,10 @@ public class TestReaderAndWriterIO {
     }
 
     /**
-     * test05的优化
+     * test04_1的优化
      */
     @Test
-    public void test06() throws IOException {
+    public void test04_2() throws IOException {
         FileReader fileReader = new FileReader("zgq.txt");
         char[] ch = new char[3];
         int len = 0;
