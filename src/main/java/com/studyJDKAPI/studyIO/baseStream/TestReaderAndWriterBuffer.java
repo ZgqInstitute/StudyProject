@@ -1,4 +1,4 @@
-package com.studyJDKAPI.studyIO;
+package com.studyJDKAPI.studyIO.baseStream;
 
 import org.junit.Test;
 
