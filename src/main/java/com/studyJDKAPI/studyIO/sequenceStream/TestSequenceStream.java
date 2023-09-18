@@ -25,6 +25,7 @@ public class TestSequenceStream {
          * 使用Vector效率低，但是ArrayList又没有枚举
          * Q：如何让ArrayList产生枚举？
          * A：使用集合工具类Collections的enumeration()方法，可以由ArrayList得到枚举
+         * 这里为了简单就直接使用Vector，可以直接得到枚举
          */
         Vector<FileInputStream> vector = new Vector<>();
         vector.add(fileInputStream1);
