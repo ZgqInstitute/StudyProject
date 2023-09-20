@@ -12,9 +12,16 @@ public class Student implements Serializable {
     private static final long serialVersionUID = 13455613297L;
 
     private String name;
-    private Integer age;
+    /**
+     * 被static修饰的属性不会被序列化。对象的公共属性一般使用static修饰
+     * 因为被static修饰的属性在方法区，不在堆中，序列化时不会把static修饰的字段一起序列化
+     */
+    private static Integer age;
     private Integer no;
-    private String address;
+    /**
+     * 被transient修饰的字段不会被序列化
+     */
+    private transient String address;
 
     public Student(String name, Integer age, Integer no, String address) {
         this.name = name;
