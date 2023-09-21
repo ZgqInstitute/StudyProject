@@ -1,0 +1,2 @@
+
+DataInputStream和DataOutputStream是操作基本数据类型的流
