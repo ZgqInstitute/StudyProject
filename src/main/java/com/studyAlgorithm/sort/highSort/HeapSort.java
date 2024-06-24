@@ -25,8 +25,15 @@ public class HeapSort {
             heapifiy(a, a.length, i);
         }
 
+        // 经过上面的构建堆，已经成型一个大顶堆
+
         // 排序
         for (int i = a.length - 1; i > 0; i--) {
+            /*
+             * 此时树的跟节点值是最大的：
+             *   1-交换根节点与最后一个子节点
+             *   2-交换完树就不满足大顶堆了，需要重新维护数组剩余的元素的平衡
+             */
             int temp = a[i];
             a[i] = a[0];
             a[0] = temp;
@@ -42,6 +49,10 @@ public class HeapSort {
      * @param i    待维护节点的下标
      */
     private void heapifiy(int[] a, int size, int i) {
+        /*
+         * 一颗树有父节点、左子节点、右子节点
+         * max就是保存父节点、左子节点、右子节点最大数的索引下标
+         */
         int max = i;
         int lson = i * 2 + 1;
         int rson = i * 2 + 2;
@@ -53,10 +64,13 @@ public class HeapSort {
             max = rson;
         }
 
+        // 若max!=i为true，说明有子节点的值比父节点的大，需要交换
         if (max != i) {
             int temp = a[i];
             a[i] = a[max];
             a[max] = temp;
+            // 若上面是左子节点的值比父节点大，那么max就是左子节点的索引
+            // 需要继续递归。左子节点
             heapifiy(a, size, max);
         }
     }
