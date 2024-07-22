@@ -25,6 +25,14 @@ public class ZGQConfigAspect {
         // 得到方法签名，哪个接口被调用，那么method就是哪个接口
         MethodSignature signature = (MethodSignature) pjp.getSignature();
         Method method = signature.getMethod();
+
+        /**
+         * 得到的className是目标接口所在的Controller类的全路径
+         * String className = method.getDeclaringClass().getName();
+         * 得到的methodName是目标接口方法名
+         * String methodName = method.getName();
+         */
+
         // 看下method方法上是否加了自定义注解
         ZGQAnnotation annotation = method.getAnnotation(ZGQAnnotation.class);
         // 创建StringBuffer，用来拼接目标接口的形参与实参
